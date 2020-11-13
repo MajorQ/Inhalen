@@ -27,7 +27,7 @@ class _ScreenState extends State<Screen> {
           selectedFontSize: 16.0,
           unselectedFontSize: 14.0,
           selectedItemColor: CustomColors.maroon,
-          unselectedItemColor: CustomColors.light_gray,
+          unselectedItemColor: CustomColors.lightGray,
           showUnselectedLabels: true,
           elevation: 24.0,
           items: const <BottomNavigationBarItem>[
