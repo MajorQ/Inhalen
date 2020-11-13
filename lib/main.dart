@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inhalen/colors.dart';
 import 'package:inhalen/pages/home.dart';
 import 'package:inhalen/pages/schedule.dart';
+import 'package:inhalen/pages/splash.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -9,7 +10,7 @@ void main() {
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Screen()));
+      home: HomePage()));
 }
 
 class Screen extends StatefulWidget {
