@@ -68,7 +68,7 @@ flutter:
     - family: Raleway
       fonts:
         - asset: assets/fonts/Raleway-Regular.ttf
-        - asset: assets/fonts/Raleway_Bold.ttf
+        - asset: assets/fonts/Raleway-Bold.ttf
           weight: 700
   #
   # For details regarding fonts from package dependencies,
