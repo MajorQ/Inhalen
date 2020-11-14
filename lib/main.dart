@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:inhalen/colors.dart';
 import 'package:inhalen/pages/home.dart';
+import 'package:inhalen/pages/introduction.dart';
 import 'package:inhalen/pages/schedule.dart';
-import 'package:inhalen/pages/splash.dart';
 
 void main() {
   runApp(MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: HomePage()));
+    title: 'Flutter Demo',
+    theme: ThemeData(
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+    ),
+    routes: {
+      '/': (context) => Screen(),
+      // '/home': (context) => Screen(),
+    },
+  ));
 }
 
 class Screen extends StatefulWidget {
