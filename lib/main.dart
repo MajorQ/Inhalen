@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inhalen/colors.dart';
 import 'package:inhalen/pages/home.dart';
-import 'package:inhalen/pages/introduction.dart';
 import 'package:inhalen/pages/schedule.dart';
 
 void main() {
