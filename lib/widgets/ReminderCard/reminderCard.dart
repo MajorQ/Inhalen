@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inhalen/ReminderCard/frontReminderCard.dart';
-import 'package:inhalen/ReminderCard/backReminderCard.dart';
+import 'frontReminderCard.dart';
+import 'backReminderCard.dart';
 import 'package:sliding_card/sliding_card.dart';
 
 class ReminderCard extends StatelessWidget {

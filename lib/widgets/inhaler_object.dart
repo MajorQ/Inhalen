@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inhalen/colors.dart';
+import 'package:inhalen/services/colors.dart';
 
 class InhalerObject extends StatelessWidget {
   @override

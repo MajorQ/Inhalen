@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inhalen/colors.dart';
+import 'package:inhalen/services/colors.dart';
 import 'package:inhalen/pages/home.dart';
 import 'package:inhalen/pages/schedule.dart';
 
@@ -12,10 +12,15 @@ void main() {
     routes: {
       '/': (context) => Screen(),
       // '/home': (context) => Screen(),
+      // 'schedule': (context) => SchedulePage(),
     },
   ));
 }
 
+class Screen extends StatefulWidget {
+  @override
+  _ScreenState createState() => _ScreenState();
+}
 
 class _ScreenState extends State<Screen> {
   // Bottom navigation bar control
