@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 
 class FrontReminderCard extends StatelessWidget {
 
-  final Color cardColor;
   final Function onSwitchChanged;
+  final Function onTimePressed;
   final bool switchStatus;
+  final Color cardColor;
+  final String label;
+  final TimeOfDay time;
 
   const FrontReminderCard({
     Key key, 
-    @required this.cardColor, 
     @required this.onSwitchChanged,
-    @required this.switchStatus,
+    @required this.onTimePressed, 
+    @required this.switchStatus, 
+    @required this.cardColor, 
+    @required this.label,
+    @required this.time, 
   }) : super(key: key);
 
   // bool switchON = true;
@@ -31,8 +37,8 @@ class FrontReminderCard extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                    child: FlatButton(
-                    onPressed: () {},
-                    child: Text('16:00',
+                    onPressed: onTimePressed,
+                    child: Text('${time.hour}:${time.minute}',
                       style: TextStyle(
                       fontSize: 40.0,
                       letterSpacing: 0.5,
@@ -65,7 +71,7 @@ class FrontReminderCard extends StatelessWidget {
                         // fontFamily: 
                       ),
                     ),
-                    Text('title',
+                    Text('$label',
                       style: TextStyle(
                       fontSize: 16.0,
                       letterSpacing: 0.15,

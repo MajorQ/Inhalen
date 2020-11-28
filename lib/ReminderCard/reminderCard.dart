@@ -6,20 +6,32 @@ import 'package:sliding_card/sliding_card.dart';
 class ReminderCard extends StatelessWidget {
 
   final SlidingCardController slidingCardController;
+  final List<bool> daySelection;
   final Function onCardTapped;
+  final Function addLabel;
+  final Function toggleDays;
   final Function delete;
   final Function onSwitchChanged;
+  final Function onTimePressed;
+  final String label;
   final Color cardColor;
   final bool switchStatus;
+  final TimeOfDay setTime;
 
   const ReminderCard({
     Key key,
-    this.slidingCardController, 
+    this.slidingCardController,
+    @required this.daySelection,
     @required this.onCardTapped, 
+    @required this.addLabel,
     @required this.delete, 
     @required this.onSwitchChanged, 
+    @required this.label,
     @required this.cardColor, 
-    @required this.switchStatus,
+    @required this.toggleDays, 
+    @required this.switchStatus, 
+    @required this.onTimePressed, 
+    @required this.setTime, 
   }): super(key: key);
   
 
@@ -37,13 +49,20 @@ class ReminderCard extends StatelessWidget {
         visibleCardHeight: 108.0,
         hiddenCardHeight: 95.0,
         frontCardWidget: FrontReminderCard(
+          onSwitchChanged: onSwitchChanged,
+          onTimePressed: onTimePressed,
           switchStatus: switchStatus,
           cardColor: cardColor, 
-          onSwitchChanged: onSwitchChanged,
+          label: label,
+          time: setTime,
         ),
         backCardWidget: BackReminderCard(
-          cardColor: cardColor, 
-          delete: delete,
+          cardColor: cardColor,
+          addLabel: addLabel,
+          toggleDays: toggleDays,
+          daySelection: daySelection,
+          delete: delete, 
+          label: label, 
         ),
       ),
     );
