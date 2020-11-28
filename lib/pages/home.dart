@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:inhalen/colors.dart';
+import 'package:inhalen/services/colors.dart';
 import 'package:inhalen/widgets/inhaler_object.dart';
 
 class HomePage extends StatelessWidget {

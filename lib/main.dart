@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inhalen/colors.dart';
+import 'package:inhalen/services/colors.dart';
 import 'package:inhalen/pages/home.dart';
 import 'package:inhalen/pages/schedule.dart';
 
@@ -12,6 +12,7 @@ void main() {
     routes: {
       '/': (context) => Screen(),
       // '/home': (context) => Screen(),
+      // 'schedule': (context) => SchedulePage(),
     },
   ));
 }
