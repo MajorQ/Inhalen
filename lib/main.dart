@@ -16,10 +16,6 @@ void main() {
   ));
 }
 
-class Screen extends StatefulWidget {
-  @override
-  _ScreenState createState() => _ScreenState();
-}
 
 class _ScreenState extends State<Screen> {
   // Bottom navigation bar control

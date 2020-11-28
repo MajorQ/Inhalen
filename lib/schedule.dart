@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:inhalen/colors.dart';
+import 'package:inhalen/reminder.dart';
+import 'package:inhalen/reminderCard.dart';
+import 'package:sliding_card/sliding_card.dart';
 
 class SchedulePage extends StatefulWidget {
   @override
@@ -7,8 +10,21 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
+  SlidingCardController controller;
 
+  List<Reminder> reminders = [
+
+  ];
   
+  TimeOfDay time;
+
+  @override
+  void initState() {
+    super.initState();
+    time = TimeOfDay.now();
+    controller = SlidingCardController();
+  } 
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,19 +42,27 @@ class _SchedulePageState extends State<SchedulePage> {
               letterSpacing: 0.15,
               fontFamily: 'Raleway',
               fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w100,
+              fontWeight: FontWeight.w400,
               color: Colors.black,
-              )
-            ),
+            )),
+          ),
+          ReminderCard(
+            slidingCardController: controller,
+            onCardTapped: () {
+              if (controller.isCardSeparated == true) {
+                controller.collapseCard();
+              }
+              else {
+                controller.expandCard();
+              }
+            }
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 104),
             child: FloatingActionButton(
               backgroundColor: CustomColors.maroon,
               foregroundColor: Colors.black,
-              onPressed: () {
-                // Respond to button press
-              },
+              onPressed: () => pickTime(),
               child: Icon(
                 Icons.add,
                 color: Colors.white,
@@ -49,4 +73,24 @@ class _SchedulePageState extends State<SchedulePage> {
       )
     );
   }
+
+  pickTime() async {
+    TimeOfDay _time = await showTimePicker(context: context, initialTime: time,
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData(), 
+          child: MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+            child: child,
+          ),
+        );
+      });
+
+    if(_time != null) {
+      setState( () {
+        time = _time;
+      });
+    }
+  }
 }
+  
