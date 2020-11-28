@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 
 class BackReminderCard extends StatelessWidget {
 
-  final String label;
+  final List<bool> daySelection;
+  final Function addLabel;
+  final Function toggleDays;
   final Function delete;
   final Color cardColor;
+  final String label;
 
   const BackReminderCard({
     Key key, 
-    this.label, 
+    @required this.daySelection,
+    @required this.addLabel,
+    @required this.toggleDays, 
     @required this.delete, 
-    @required this.cardColor
+    @required this.cardColor, 
+    @required this.label,
   }) : super(key: key);
 
   @override
@@ -21,47 +27,46 @@ class BackReminderCard extends StatelessWidget {
         alignment: AlignmentDirectional.bottomStart,
         children: <Widget>[
           // Widget for reminder days
-          // Row(
-          //   children: <Widget>[
-          //    SizedBox(height: 10),
-          //   ],
-          // ),
+          Positioned(
+            top: 5,
+            child: ToggleButtons(
+              children: <Widget>[
+                ButtonTheme(
+                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  child: FlatButton(
+                    onPressed: () {}, 
+                    child: Text ('M'),
+                  ),
+                ),
+                ButtonTheme(
+                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  child: FlatButton(
+                    onPressed: () {}, 
+                    child: Text ('M'),
+                  ),
+                ),
+              ],
+              textStyle: TextStyle(
+                fontFamily: 'Raleway',
+                fontStyle: FontStyle.normal,
+              ),
+              renderBorder: false,
+              // constraints: BoxConstraints(
+              //   maxWidth: 5,
+              // ),
+              onPressed: toggleDays,
+              isSelected: daySelection,
+            ),
+          ),
           Row (
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               // Widget for changing reminder label
               FlatButton.icon(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      //show text fields input
-                      return AlertDialog(
-                        // title: Text('Reset settings?'),
-                        content: TextFormField(
-                          // initialValue: 'Reminder',
-                          decoration: InputDecoration(
-                            labelText: label,
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        // Button for cancel or 
-                        actions: [
-                          FlatButton(
-                            textColor: Color(0xFF6200EE),
-                            onPressed: () {},
-                            child: Text('Cancel'),
-                          ),
-                          FlatButton(
-                            textColor: Color(0xFF6200EE),
-                            onPressed: () {},
-                            child: Text('OK'),
-                          ),
-                        ],
-                      );
-                  });
-                },
-                label: Text('Label'),
+                onPressed: addLabel,
+                label: Text('$label'),
                 icon: Icon(Icons.label),
               ),
               // Widget for deleting reminder card

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inhalen/colors.dart';
 import 'package:inhalen/ReminderCard/reminderCard.dart';
-import 'package:sliding_card/sliding_card.dart';
 import 'ReminderCard/reminderData.dart';
 
 class SchedulePage extends StatefulWidget {
@@ -10,22 +9,9 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  
-  Color cardColor;
-  SlidingCardController controller;
-  ReminderData reminders = ReminderData(time: TimeOfDay.now());
-  bool switchON = true;
-  // List<Reminder> reminders = [ 
 
-  // ];
- 
-  @override
-  void initState() {
-    super.initState();
-    reminders.time = TimeOfDay.now();
-    controller = SlidingCardController();
-    cardColor = CustomColors.blue;
-  } 
+  final GlobalKey<FormState> labelKey = GlobalKey<FormState>();
+  List<ReminderData> reminders = [];
 
   @override
   Widget build(BuildContext context) {
@@ -47,33 +33,64 @@ class _SchedulePageState extends State<SchedulePage> {
               color: Colors.black,
             )),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 131, 0, 0),
-            child: ReminderCard(
-              delete: () {},
-              switchStatus: switchON,
-              onSwitchChanged: (bool state) {
-                setState(() {
-                  switchON = state;
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 131, 0, 0),
+              child: ListView.builder(
+                itemCount: reminders.length,
+                itemBuilder: (context, index) {
+                  return Center(
+                    child: ReminderCard(
+                      setTime: reminders[index].time,
+                      switchStatus: reminders[index].switchON,
+                      cardColor: reminders[index].cardColor,
+                      label: reminders[index].label,
+                      slidingCardController: reminders[index].controller,
+                      daySelection: reminders[index].daySelection,
+                      onTimePressed: () => pickTime(index),
+                      onSwitchChanged: (bool state) {
+                        setState(() {
+                          reminders[index].switchON = state;
 
-                  if (switchON == true) {
-                    cardColor = CustomColors.blue;
-                  }
-                  else {
-                    cardColor = CustomColors.lightGray;
-                  }
-               });
-              },
-              cardColor: cardColor,
-              slidingCardController: controller,
-              onCardTapped: () {
-                if (controller.isCardSeparated == true) {
-                  controller.collapseCard();
+                          if (reminders[index].switchON == true) {
+                            reminders[index].cardColor = CustomColors.yellow;
+                          }
+                          else {
+                            reminders[index].cardColor = CustomColors.lightGray;
+                          }
+                      });
+                      },
+                      addLabel: () => pickLabel(index),
+                      toggleDays: (day) {
+                        setState(() {
+                          reminders[index].daySelection[day] = !reminders[index].daySelection[day];
+                        });
+                      },
+                      delete: () {
+                        setState(() {
+                          reminders.remove(reminders[index]);
+                        });
+                      },
+                      onCardTapped: () {
+                        if (reminders[index].controller.isCardSeparated == true) {
+                          reminders[index].controller.collapseCard();
+                        }
+                        else {
+                          for(int i=0; i < reminders.length; ++i) {
+                            reminders[index].controller.expandCard();
+                            // if (i == index) {
+                            //   reminders[index].controller.expandCard();
+                            // }
+                            // else {
+                            //   reminders[index].controller.collapseCard();
+                            // }
+                          }
+                        }
+                      }
+                    ),
+                  );
                 }
-                else {
-                  controller.expandCard();
-                }
-              }
+              ),
             ),
           ),
           Padding(
@@ -81,7 +98,16 @@ class _SchedulePageState extends State<SchedulePage> {
             child: FloatingActionButton(
               backgroundColor: CustomColors.maroon,
               foregroundColor: Colors.black,
-              onPressed: () => pickTime(),
+              onPressed: () {
+                reminders.add(ReminderData(
+                  time: TimeOfDay.now(),
+                  label: 'label',
+                  switchON: true,
+                  cardColor: CustomColors.yellow,
+                  daySelection: List.generate(2, (index) => false),
+                ));
+                pickTime(reminders.length-1);
+              },
               child: Icon(
                 Icons.add,
                 color: Colors.white,
@@ -94,10 +120,10 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   // Function for time picker
-  pickTime() async {
+  pickTime(int i) async {
     TimeOfDay _time = await showTimePicker(
       context: context, 
-      initialTime: reminders.time,
+      initialTime: reminders[i].time,
       builder: (BuildContext context, Widget child) {
         return Theme(
           data: ThemeData(), 
@@ -109,10 +135,56 @@ class _SchedulePageState extends State<SchedulePage> {
       });
 
     if(_time != null) {
-      setState( () {
-        reminders.time = _time;
-      });
+      setState( () => reminders[i].time = _time);
     }
   }
+
+  pickLabel(int i) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        //show text fields input
+        return AlertDialog(
+          content: Form(
+            key: labelKey,
+            child: TextFormField(            
+              decoration: InputDecoration(
+                labelText: 'label',
+                labelStyle: TextStyle(
+                  fontFamily: 'Raleway',
+                  fontStyle: FontStyle.normal,
+                ),
+                border: OutlineInputBorder(),
+              ),
+              maxLength: 8,
+              keyboardType: TextInputType.name,
+              onSaved: (String value) {
+                setState( () => reminders[i].label = value);
+              },
+              validator: (String value) {
+                return value.length > 8 ? 'Label must be less than or\nequal to 8 letters' : null;
+              },
+            ),
+          ),
+          // Button for cancel or submit label
+          actions: [
+            FlatButton(
+              textColor: CustomColors.maroon,
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Cancel'),
+            ),
+            FlatButton(
+              textColor: CustomColors.maroon,
+              onPressed: () {
+                if(labelKey.currentState.validate()) {
+                  labelKey.currentState.save();
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+    });
+  }
 }
-  
