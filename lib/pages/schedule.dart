@@ -5,12 +5,7 @@ import 'package:inhalen/services/reminderData.dart';
 import 'package:inhalen/widgets/ReminderCard/reminderCard.dart';
 import 'package:provider/provider.dart';
 
-class SchedulePage extends StatefulWidget {
-  @override
-  _SchedulePageState createState() => _SchedulePageState();
-}
-
-class _SchedulePageState extends State<SchedulePage> {
+class SchedulePage extends StatelessWidget {
   final GlobalKey<FormState> labelKey = GlobalKey<FormState>();
 
   @override
@@ -52,11 +47,12 @@ class _SchedulePageState extends State<SchedulePage> {
                                   reminders[index].controller,
                               daySelection: reminders[index].daySelection,
                               onTimePressed: () =>
-                                  pickTime(_reminderModel, index),
+                                  pickTime(context, _reminderModel, index),
                               onSwitchChanged: (bool state) {
                                 _reminderModel.changeSwitch(state, index);
                               },
-                              addLabel: () => pickLabel(_reminderModel, index),
+                              addLabel: () =>
+                                  pickLabel(context, _reminderModel, index),
                               toggleDays: (day) {
                                 _reminderModel.toggleDays(day, index);
                               },
@@ -96,7 +92,7 @@ class _SchedulePageState extends State<SchedulePage> {
                 foregroundColor: Colors.black,
                 onPressed: () {
                   _reminderModel.add();
-                  pickTime(_reminderModel, reminders.length - 1);
+                  pickTime(context, _reminderModel, reminders.length - 1);
                 },
                 child: Icon(
                   Icons.add,
@@ -109,7 +105,7 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   // Function for time picker
-  pickTime(ReminderModel _reminderModel, int i) async {
+  pickTime(BuildContext context, ReminderModel _reminderModel, int i) async {
     TimeOfDay _time = await showTimePicker(
         context: context,
         initialTime: _reminderModel.getTime(i),
@@ -129,7 +125,7 @@ class _SchedulePageState extends State<SchedulePage> {
     }
   }
 
-  pickLabel(ReminderModel _reminderModel, int i) async {
+  pickLabel(BuildContext context, ReminderModel _reminderModel, int i) async {
     showDialog(
         context: context,
         builder: (context) {
