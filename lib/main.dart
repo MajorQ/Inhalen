@@ -4,11 +4,23 @@ import 'package:inhalen/pages/home.dart';
 import 'package:inhalen/pages/schedule.dart';
 import 'package:inhalen/services/reminder_model.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_wrapper.dart';
 
 void main() {
   runApp(ChangeNotifierProvider<ReminderModel>(
     create: (context) => ReminderModel(),
     child: MaterialApp(
+      builder: (context, widget) => ResponsiveWrapper.builder(
+        Screen(),
+        maxWidth: 1200,
+        minWidth: 480,
+        defaultScale: true,
+        breakpoints: [
+          ResponsiveBreakpoint.resize(480, name: MOBILE),
+          ResponsiveBreakpoint.autoScale(800, name: TABLET),
+          ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+        ],
+      ),
       title: 'Flutter Demo',
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
