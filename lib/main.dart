@@ -10,22 +10,23 @@ void main() {
   runApp(ChangeNotifierProvider<ReminderModel>(
     create: (context) => ReminderModel(),
     child: MaterialApp(
-      builder: (context, widget) => ResponsiveWrapper.builder(
-        Screen(),
-        maxWidth: 1200,
-        minWidth: 480,
-        defaultScale: true,
-        breakpoints: [
-          ResponsiveBreakpoint.resize(480, name: MOBILE),
-          ResponsiveBreakpoint.autoScale(800, name: TABLET),
-          ResponsiveBreakpoint.resize(1000, name: DESKTOP),
-        ],
-      ),
       title: 'Flutter Demo',
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      routes: {'/': (context) => Screen()},
+      routes: {
+        '/': (context) => ResponsiveWrapper.builder(
+              Screen(),
+              maxWidth: 1200,
+              minWidth: 480,
+              defaultScale: true,
+              breakpoints: [
+                ResponsiveBreakpoint.resize(350, name: MOBILE),
+                ResponsiveBreakpoint.autoScale(800, name: TABLET),
+                ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+              ],
+            ),
+      },
     ),
   ));
 }

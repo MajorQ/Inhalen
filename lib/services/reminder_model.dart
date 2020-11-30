@@ -22,7 +22,6 @@ class ReminderModel extends ChangeNotifier {
 
   void delete(int index) {
     _reminders.removeAt(index);
-    print('deleted');
     notifyListeners();
   }
 
