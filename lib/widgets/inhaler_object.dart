@@ -8,7 +8,7 @@ class InhalerObject extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 2.0),
         decoration: BoxDecoration(
             color: CustomColors.yellow,
-            borderRadius: BorderRadius.circular(2),
+            borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.25),

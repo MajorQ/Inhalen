@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class BackReminderCard extends StatelessWidget {
-
   final List<bool> daySelection;
   final Function addLabel;
   final Function toggleDays;
@@ -10,12 +9,12 @@ class BackReminderCard extends StatelessWidget {
   final String label;
 
   const BackReminderCard({
-    Key key, 
+    Key key,
     @required this.daySelection,
     @required this.addLabel,
-    @required this.toggleDays, 
-    @required this.delete, 
-    @required this.cardColor, 
+    @required this.toggleDays,
+    @required this.delete,
+    @required this.cardColor,
     @required this.label,
   }) : super(key: key);
 
@@ -23,6 +22,8 @@ class BackReminderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: cardColor,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(const Radius.circular(10))),
       child: Stack(
         alignment: AlignmentDirectional.bottomStart,
         children: <Widget>[
@@ -35,16 +36,16 @@ class BackReminderCard extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   child: FlatButton(
-                    onPressed: () {}, 
-                    child: Text ('M'),
+                    onPressed: () {},
+                    child: Text('M'),
                   ),
                 ),
                 ButtonTheme(
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   child: FlatButton(
-                    onPressed: () {}, 
-                    child: Text ('M'),
+                    onPressed: () {},
+                    child: Text('M'),
                   ),
                 ),
               ],
@@ -60,7 +61,7 @@ class BackReminderCard extends StatelessWidget {
               isSelected: daySelection,
             ),
           ),
-          Row (
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               // Widget for changing reminder label
@@ -82,7 +83,3 @@ class BackReminderCard extends StatelessWidget {
     );
   }
 }
-
-
-
-
