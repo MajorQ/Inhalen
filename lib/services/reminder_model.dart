@@ -15,9 +15,9 @@ class ReminderModel extends ChangeNotifier {
       label: 'label',
       switchON: true,
       cardColor: CustomColors.yellow,
-      daySelection: List.generate(2, (index) => false),
+      daySelection: List.generate(7, (index) => false),
     ));
-    notifyListeners();
+    // notifyListeners();
   }
 
   void delete(int index) {

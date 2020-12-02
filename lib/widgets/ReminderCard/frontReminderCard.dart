@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inhalen/services/colors.dart';
 
 class FrontReminderCard extends StatelessWidget {
   final Function onSwitchChanged;
@@ -45,7 +46,7 @@ class FrontReminderCard extends StatelessWidget {
                           fontFamily: 'OpenSans',
                           fontStyle: FontStyle.normal,
                           fontWeight: FontWeight.w700,
-                          color: Colors.black,
+                          color: CustomColors.black,
                         )),
                   ),
                 ),
@@ -61,7 +62,7 @@ class FrontReminderCard extends StatelessWidget {
                           fontFamily: 'Raleway',
                           fontStyle: FontStyle.normal,
                           fontWeight: FontWeight.w400,
-                          color: Colors.black,
+                          color: CustomColors.black,
                         )),
                     //seperator
                     Text(
@@ -69,7 +70,7 @@ class FrontReminderCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        // fontFamily:
+                        color: CustomColors.black,
                       ),
                     ),
                     Text('$label',
@@ -79,7 +80,7 @@ class FrontReminderCard extends StatelessWidget {
                           fontFamily: 'Raleway',
                           fontStyle: FontStyle.normal,
                           fontWeight: FontWeight.w400,
-                          color: Colors.black,
+                          color: CustomColors.black,
                         )),
                   ],
                 ),

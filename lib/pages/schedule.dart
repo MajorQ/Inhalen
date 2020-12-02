@@ -31,7 +31,7 @@ class SchedulePage extends StatelessWidget {
           ),
           Center(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 131, 0, 0),
+              padding: const EdgeInsets.fromLTRB(0, 131, 0, 105),
               child: Consumer<ReminderModel>(
                 builder: (context, _reminderModel, child) {
                   return ListView.builder(
@@ -43,37 +43,26 @@ class SchedulePage extends StatelessWidget {
                               switchStatus: reminders[index].switchON,
                               cardColor: reminders[index].cardColor,
                               label: reminders[index].label,
-                              slidingCardController:
-                                  reminders[index].controller,
+                              slidingCardController: reminders[index].controller,
                               daySelection: reminders[index].daySelection,
-                              onTimePressed: () =>
-                                  pickTime(context, _reminderModel, index),
-                              onSwitchChanged: (bool state) {
-                                _reminderModel.changeSwitch(state, index);
-                              },
-                              addLabel: () =>
-                                  pickLabel(context, _reminderModel, index),
-                              toggleDays: (day) {
-                                _reminderModel.toggleDays(day, index);
-                              },
-                              delete: () {
-                                _reminderModel.delete(index);
-                              },
+                              onTimePressed: () => pickTime(context, _reminderModel, index),
+                              onSwitchChanged: (bool state) => _reminderModel.changeSwitch(state, index),
+                              addLabel: () => pickLabel(context, _reminderModel, index),
+                              toggleDays: (day) => _reminderModel.toggleDays(day, index),
+                              delete: () async => _reminderModel.delete(index),
                               onCardTapped: () {
-                                if (reminders[index]
-                                        .controller
-                                        .isCardSeparated ==
-                                    true) {
+                                if (reminders[index].controller.isCardSeparated == true) {
                                   reminders[index].controller.collapseCard();
-                                } else {
+                                } 
+                                else {
+                                  reminders[index].controller.expandCard();
                                   for (int i = 0; i < reminders.length; ++i) {
-                                    reminders[index].controller.expandCard();
-                                    // if (i == index) {
-                                    //   reminders[index].controller.expandCard();
-                                    // }
-                                    // else {
-                                    //   reminders[index].controller.collapseCard();
-                                    // }
+                                    if (i == index) {
+                                      continue;
+                                    }
+                                    else {
+                                      reminders[i].controller.collapseCard();
+                                    }
                                   }
                                 }
                               }),
@@ -123,8 +112,12 @@ class SchedulePage extends StatelessWidget {
     if (_time != null) {
       _reminderModel.pickTime(i, _time);
     }
+    else {
+      _reminderModel.delete(i);
+    }
   }
 
+  //function for pick label
   pickLabel(BuildContext context, ReminderModel _reminderModel, int i) async {
     showDialog(
         context: context,
@@ -148,9 +141,7 @@ class SchedulePage extends StatelessWidget {
                   _reminderModel.pickLabel(i, value);
                 },
                 validator: (String value) {
-                  return value.length > 8
-                      ? 'Label must be less than or\nequal to 8 letters'
-                      : null;
+                  return value.length > 8 ? 'Label must be less than or\nequal to 8 letters' : null;
                 },
               ),
             ),
