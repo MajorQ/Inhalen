@@ -13,6 +13,7 @@ class ReminderCard extends StatelessWidget {
   final Function onSwitchChanged;
   final Function onTimePressed;
   final String label;
+  final String days;
   final Color cardColor;
   final bool switchStatus;
   final TimeOfDay setTime;
@@ -26,6 +27,7 @@ class ReminderCard extends StatelessWidget {
     @required this.delete,
     @required this.onSwitchChanged,
     @required this.label,
+    @required this.days,
     @required this.cardColor,
     @required this.toggleDays,
     @required this.switchStatus,
@@ -52,6 +54,7 @@ class ReminderCard extends StatelessWidget {
           switchStatus: switchStatus,
           cardColor: cardColor,
           label: label,
+          days: days,
           time: setTime,
         ),
         backCardWidget: BackReminderCard(

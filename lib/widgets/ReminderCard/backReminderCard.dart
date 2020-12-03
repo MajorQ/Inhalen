@@ -42,7 +42,7 @@ class BackReminderCard extends StatelessWidget {
                 Text('   S   '),
               ],
               textStyle: TextStyle(
-                fontFamily: 'Raleway',
+                fontFamily: 'OpenSans',
                 fontStyle: FontStyle.normal,
                 fontWeight: FontWeight.bold,
                 fontSize: 20.0,
@@ -57,7 +57,7 @@ class BackReminderCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
               borderColor: CustomColors.black,
               borderWidth: 1.5,
-              selectedBorderColor: CustomColors.blue,
+              selectedBorderColor: CustomColors.black,
               selectedColor: CustomColors.blue,
             ),
           ),
@@ -68,7 +68,10 @@ class BackReminderCard extends StatelessWidget {
               FlatButton.icon(
                 onPressed: addLabel,
                 label: Text('$label',
-                  style: TextStyle( color: CustomColors.black),
+                  style: TextStyle(
+                    color: CustomColors.black,
+                    fontFamily: 'OpenSans',
+                  ),
                 ),
                 icon: Icon(Icons.label, color: CustomColors.black),
               ),
@@ -76,7 +79,10 @@ class BackReminderCard extends StatelessWidget {
               FlatButton.icon(
                 onPressed: delete,
                 label: Text('Delete',
-                  style: TextStyle( color: CustomColors.black),
+                  style: TextStyle(
+                    color: CustomColors.black,
+                    fontFamily: 'OpenSans',
+                  ),
                 ),
                 icon: Icon(Icons.delete, color: CustomColors.black),
               ),

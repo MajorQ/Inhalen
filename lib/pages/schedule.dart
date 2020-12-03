@@ -45,6 +45,7 @@ class SchedulePage extends StatelessWidget {
                               label: reminders[index].label,
                               slidingCardController: reminders[index].controller,
                               daySelection: reminders[index].daySelection,
+                              days: reminders[index].days,
                               onTimePressed: () => pickTime(context, _reminderModel, index),
                               onSwitchChanged: (bool state) => _reminderModel.changeSwitch(state, index),
                               addLabel: () => pickLabel(context, _reminderModel, index),
@@ -96,18 +97,20 @@ class SchedulePage extends StatelessWidget {
   // Function for time picker
   pickTime(BuildContext context, ReminderModel _reminderModel, int i) async {
     TimeOfDay _time = await showTimePicker(
-        context: context,
-        initialTime: _reminderModel.getTime(i),
-        builder: (BuildContext context, Widget child) {
-          return Theme(
-            data: ThemeData(),
-            child: MediaQuery(
-              data:
-                  MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-              child: child,
+      context: context,
+      initialTime: _reminderModel.getTime(i),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData(
             ),
-          );
-        });
+          child: MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+             child: child,
+          ),
+        );
+     });
+
+    // _time = DateFormat.Hm().format(_time);
 
     if (_time != null) {
       _reminderModel.pickTime(i, _time);
@@ -117,7 +120,7 @@ class SchedulePage extends StatelessWidget {
     }
   }
 
-  //function for pick label
+  //function for label picker
   pickLabel(BuildContext context, ReminderModel _reminderModel, int i) async {
     showDialog(
         context: context,
@@ -128,7 +131,7 @@ class SchedulePage extends StatelessWidget {
               key: labelKey,
               child: TextFormField(
                 decoration: InputDecoration(
-                  labelText: 'label',
+                  labelText: 'Label',
                   labelStyle: TextStyle(
                     fontFamily: 'Raleway',
                     fontStyle: FontStyle.normal,
@@ -148,19 +151,30 @@ class SchedulePage extends StatelessWidget {
             // Button for cancel or submit label
             actions: [
               FlatButton(
-                textColor: CustomColors.maroon,
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text('Cancel'),
+                child: Text('Cancel',
+                  style: TextStyle(
+                    fontFamily: 'OpenSans',
+                    color: CustomColors.maroon,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
               FlatButton(
-                textColor: CustomColors.maroon,
+                // textColor: CustomColors.maroon,
                 onPressed: () {
                   if (labelKey.currentState.validate()) {
                     labelKey.currentState.save();
                     Navigator.of(context).pop();
                   }
                 },
-                child: Text('OK'),
+                child: Text('OK',
+                  style: TextStyle(
+                    fontFamily: 'OpenSans',
+                    color: CustomColors.maroon,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ],
           );

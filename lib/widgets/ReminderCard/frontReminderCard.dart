@@ -7,6 +7,7 @@ class FrontReminderCard extends StatelessWidget {
   final bool switchStatus;
   final Color cardColor;
   final String label;
+  final String days;
   final TimeOfDay time;
 
   const FrontReminderCard({
@@ -16,7 +17,8 @@ class FrontReminderCard extends StatelessWidget {
     @required this.switchStatus,
     @required this.cardColor,
     @required this.label,
-    @required this.time,
+    @required this.days,
+    @required this.time, 
   }) : super(key: key);
 
   // bool switchON = true;
@@ -55,7 +57,7 @@ class FrontReminderCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     //Days
-                    Text('Wednesday',
+                    Text('$days',
                         style: TextStyle(
                           fontSize: 16.0,
                           letterSpacing: 0.15,
@@ -64,16 +66,15 @@ class FrontReminderCard extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                           color: CustomColors.black,
                         )),
-                    //seperator
-                    Text(
-                      ' \u2022 ',
+                    //separator
+                    Text(label == 'Label'? '':' \u2022 ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: CustomColors.black,
                       ),
                     ),
-                    Text('$label',
+                    Text(label == 'Label'? '':'$label',
                         style: TextStyle(
                           fontSize: 16.0,
                           letterSpacing: 0.15,

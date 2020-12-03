@@ -12,8 +12,9 @@ class ReminderModel extends ChangeNotifier {
   void add() {
     _reminders.add(ReminderData(
       time: TimeOfDay.now(),
-      label: 'label',
+      label: 'Label',
       switchON: true,
+      days: 'Select day',
       cardColor: CustomColors.yellow,
       daySelection: List.generate(7, (index) => false),
     ));
@@ -36,12 +37,14 @@ class ReminderModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleDays(dynamic day, int index) {
+  void toggleDays(int day, int index) {
     _reminders[index].daySelection[day] = !_reminders[index].daySelection[day];
+    _reminders[index].getDays();
     notifyListeners();
   }
 
   void pickTime(int index, TimeOfDay time) {
+    // time = TimeOfDay.fromDateTime(time)
     _reminders[index].time = time;
     notifyListeners();
   }
