@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:inhalen/services/colors.dart';
 import 'package:inhalen/pages/home.dart';
 import 'package:inhalen/pages/schedule.dart';
 import 'package:inhalen/services/reminder_model.dart';
-import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
 
 void main() {
   runApp(ChangeNotifierProvider<ReminderModel>(
@@ -15,17 +14,7 @@ void main() {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       routes: {
-        '/': (context) => ResponsiveWrapper.builder(
-              Screen(),
-              maxWidth: 1200,
-              minWidth: 480,
-              defaultScale: true,
-              breakpoints: [
-                ResponsiveBreakpoint.resize(350, name: MOBILE),
-                ResponsiveBreakpoint.autoScale(800, name: TABLET),
-                ResponsiveBreakpoint.resize(1000, name: DESKTOP),
-              ],
-            ),
+        '/': (context) => Screen(),
       },
     ),
   ));
@@ -51,8 +40,7 @@ class _ScreenState extends State<Screen> {
       case 0:
         return HomePage();
       case 1:
-        return Consumer<ReminderModel>(
-            builder: (context, _reminderModel, child) => SchedulePage());
+        return SchedulePage();
     }
     return HomePage();
   }

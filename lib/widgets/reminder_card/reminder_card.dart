@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'frontReminderCard.dart';
-import 'backReminderCard.dart';
+import 'front_reminder_card.dart';
+import 'back_reminder_card.dart';
 import 'package:sliding_card/sliding_card.dart';
 
 class ReminderCard extends StatelessWidget {

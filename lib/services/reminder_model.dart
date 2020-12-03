@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inhalen/services/colors.dart';
-import 'package:inhalen/services/reminderData.dart';
+import 'package:inhalen/services/reminder_data.dart';
 
 class ReminderModel extends ChangeNotifier {
   List<ReminderData> _reminders = [];

@@ -1,0 +1,21 @@
+{
+    "Reminders": [
+        {
+            "time" : "13.00",
+            "label" : "New",
+            "switchON" : true,
+            "cardColor" : "Colors.yellow",
+            "daySelection" : [
+                {
+                    "mon" : false,
+                    "tue" : true,
+                    "wed" : true,
+                    "thu" : false,
+                    "fri" : false,
+                    "sat" : false,
+                    "sun" : true
+                }
+            ]
+        }
+    ]
+}

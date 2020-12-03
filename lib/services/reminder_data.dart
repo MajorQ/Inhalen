@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sliding_card/sliding_card.dart';
 
 class ReminderData {
-
   TimeOfDay time;
   String label;
   bool switchON;
@@ -11,11 +10,14 @@ class ReminderData {
   SlidingCardController controller;
 
   ReminderData({
-    this.time, 
+    this.time,
     this.label,
     this.switchON,
     this.cardColor,
     this.daySelection,
-  }): controller = SlidingCardController();
+  }) : controller = SlidingCardController();
 
+  Map<String, dynamic> toMap() {}
+
+  ReminderData.fromMap(Map<String, dynamic> map) {}
 }
