@@ -67,14 +67,14 @@ class FrontReminderCard extends StatelessWidget {
                           color: CustomColors.black,
                         )),
                     //separator
-                    Text(label == 'Label'? '':' \u2022 ',
+                    Text(label=='Label' ? '':' \u2022 ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: CustomColors.black,
                       ),
                     ),
-                    Text(label == 'Label'? '':'$label',
+                    Text(label=='Label' ? '':'$label',
                         style: TextStyle(
                           fontSize: 16.0,
                           letterSpacing: 0.15,

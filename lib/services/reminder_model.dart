@@ -50,6 +50,7 @@ class ReminderModel extends ChangeNotifier {
   }
 
   void pickLabel(int index, String value) {
+    value = value == '' ? 'Label' : value;
     _reminders[index].label = value;
     notifyListeners();
   }
