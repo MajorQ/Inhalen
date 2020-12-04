@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:inhalen/services/colors.dart';
 import 'package:inhalen/services/reminder_model.dart';
-import 'package:inhalen/services/reminderData.dart';
-import 'package:inhalen/widgets/ReminderCard/reminderCard.dart';
+import 'package:inhalen/services/reminder_data.dart';
+import 'package:inhalen/widgets/reminder_card/reminder_card.dart';
 import 'package:provider/provider.dart';
 
 class SchedulePage extends StatelessWidget {
@@ -99,18 +99,49 @@ class SchedulePage extends StatelessWidget {
     TimeOfDay _time = await showTimePicker(
       context: context,
       initialTime: _reminderModel.getTime(i),
+      cancelText: 'Cancel',
+      helpText: 'Select Time',
+      // helpText: ,
       builder: (BuildContext context, Widget child) {
         return Theme(
           data: ThemeData(
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: CustomColors.maroon,
+                textStyle: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontWeight: FontWeight.w600,
+                  color: CustomColors.maroon,
+                  fontStyle: FontStyle.normal,
+                ),
+              ),
             ),
+            timePickerTheme: TimePickerThemeData(
+              backgroundColor: CustomColors.yellow,
+              dialBackgroundColor: CustomColors.lightYellow,
+              dialHandColor: CustomColors.maroon,
+              entryModeIconColor: CustomColors.maroon,
+              hourMinuteTextStyle: TextStyle(
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.bold,
+                color: CustomColors.black,
+                fontSize: 60.0,
+              ),
+              helpTextStyle: TextStyle(
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.w600,
+                color: CustomColors.maroon,
+                fontStyle: FontStyle.normal,
+              ),
+            ),
+          ),
           child: MediaQuery(
             data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
              child: child,
           ),
         );
-     });
-
-    // _time = DateFormat.Hm().format(_time);
+     }
+    );
 
     if (_time != null) {
       _reminderModel.pickTime(i, _time);
@@ -127,16 +158,22 @@ class SchedulePage extends StatelessWidget {
         builder: (context) {
           //show text fields input
           return AlertDialog(
+            backgroundColor: CustomColors.yellow,
             content: Form(
               key: labelKey,
               child: TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Label',
+                  focusColor: CustomColors.blue,
+                  border: OutlineInputBorder(),
                   labelStyle: TextStyle(
                     fontFamily: 'Raleway',
                     fontStyle: FontStyle.normal,
                   ),
-                  border: OutlineInputBorder(),
+                  errorStyle: TextStyle(
+                    fontFamily: 'Raleway',
+                    fontStyle: FontStyle.normal,
+                  )
                 ),
                 maxLength: 8,
                 keyboardType: TextInputType.name,
