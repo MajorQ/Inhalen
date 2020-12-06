@@ -21,7 +21,7 @@ class ReminderModel extends ChangeNotifier {
     if (maps != null) {
       for (int index = 0; index < maps.length; index++) {
         ReminderData newReminder =
-            new ReminderData(daySelection: List.generate(2, (index) => false));
+            new ReminderData(daySelection: List.generate(7, (index) => false));
         newReminder.fromMap(maps[index]);
         _reminders.add(newReminder);
       }
@@ -40,7 +40,7 @@ class ReminderModel extends ChangeNotifier {
       switchON: true,
       days: 'Select day',
       cardColor: CustomColors.yellow,
-      daySelection: List.generate(2, (index) => false),
+      daySelection: List.generate(7, (index) => false),
     );
     _reminders.add(newReminder);
     _localStorage.createReminder(newReminder.toMap(_reminders.length - 1));
@@ -71,9 +71,9 @@ class ReminderModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // TODO: implement toggle days;
   void toggleDays(dynamic day, int index) {
     _reminders[index].daySelection[day] = !_reminders[index].daySelection[day];
+    _reminders[index].getDays();
     // _localStorage.updateReminder(index, column, value)
     notifyListeners();
   }
@@ -87,9 +87,8 @@ class ReminderModel extends ChangeNotifier {
 
   // Change the reminder label value from a specific index, then performs an update
   void changeLabelOnIndex(int index, String value) {
-    _reminders[index].label = value;
+    _reminders[index].label = value ?? 'label';
     _localStorage.updateReminder(index, _reminders[index].toMap(index));
     notifyListeners();
   }
-
 }
