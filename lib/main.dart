@@ -26,8 +26,10 @@ class Screen extends StatefulWidget {
 }
 
 class _ScreenState extends State<Screen> {
+  // A ReminderModel instance for initialization
   ReminderModel _reminderModel;
 
+  // Initialize ReminderModel instance by fetching list from the local storage
   void initState() {
     super.initState();
     _reminderModel = Provider.of<ReminderModel>(context, listen: false);
@@ -36,7 +38,7 @@ class _ScreenState extends State<Screen> {
         .then((value) => print('Database Initialized'));
   }
 
-  // Bottom navigation bar   control
+  // Change the index of bottom navigation bar based on touch
   int _currentIndex = 0;
   void _changeIndex(index) {
     setState(() {
@@ -44,7 +46,7 @@ class _ScreenState extends State<Screen> {
     });
   }
 
-  // Function to get current Page
+  // Function to get current page based on index
   Widget _getScaffoldBody(BuildContext context) {
     switch (_currentIndex) {
       case 0:

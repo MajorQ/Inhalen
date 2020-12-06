@@ -23,8 +23,10 @@ final String columnDaySunday = 'sunday';
 // NOTE: try to decrease number of columns, or create a new table in the future
 
 class DatabaseHelper {
+  // A database instance
   Database _db;
 
+  // Open database
   Future open() async {
     if (_db == null) {
       String path = await getDatabasesPath() + 'database.db';
