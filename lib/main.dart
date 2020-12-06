@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:inhalen/services/colors.dart';
+import 'package:inhalen/services/reminder_model.dart';
 import 'package:inhalen/pages/home.dart';
 import 'package:inhalen/pages/schedule.dart';
-import 'package:inhalen/services/reminder_model.dart';
-import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
 
 void main() {
   runApp(ChangeNotifierProvider<ReminderModel>(
@@ -15,17 +14,7 @@ void main() {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       routes: {
-        '/': (context) => ResponsiveWrapper.builder(
-              Screen(),
-              maxWidth: 1200,
-              minWidth: 480,
-              defaultScale: true,
-              breakpoints: [
-                ResponsiveBreakpoint.resize(350, name: MOBILE),
-                ResponsiveBreakpoint.autoScale(800, name: TABLET),
-                ResponsiveBreakpoint.resize(1000, name: DESKTOP),
-              ],
-            ),
+        '/': (context) => Screen(),
       },
     ),
   ));
@@ -37,7 +26,19 @@ class Screen extends StatefulWidget {
 }
 
 class _ScreenState extends State<Screen> {
-  // Bottom navigation bar control
+  // A ReminderModel instance for initialization
+  ReminderModel _reminderModel;
+
+  // Initialize ReminderModel instance by fetching list from the local storage
+  void initState() {
+    super.initState();
+    _reminderModel = Provider.of<ReminderModel>(context, listen: false);
+    _reminderModel
+        .fetchListFromStorage()
+        .then((value) => print('Database Initialized'));
+  }
+
+  // Change the index of bottom navigation bar based on touch
   int _currentIndex = 0;
   void _changeIndex(index) {
     setState(() {
@@ -45,14 +46,13 @@ class _ScreenState extends State<Screen> {
     });
   }
 
-  // Function to get current Page
-  Widget _getBody(BuildContext context) {
+  // Function to get current page based on index
+  Widget _getScaffoldBody(BuildContext context) {
     switch (_currentIndex) {
       case 0:
         return HomePage();
       case 1:
-        return Consumer<ReminderModel>(
-            builder: (context, _reminderModel, child) => SchedulePage());
+        return SchedulePage();
     }
     return HomePage();
   }
@@ -62,7 +62,7 @@ class _ScreenState extends State<Screen> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
-      body: _getBody(context),
+      body: _getScaffoldBody(context),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
