@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'frontReminderCard.dart';
-import 'backReminderCard.dart';
+import 'front_reminder_card.dart';
+import 'back_reminder_card.dart';
 import 'package:sliding_card/sliding_card.dart';
 
-class ReminderCard extends StatelessWidget {
 
+class ReminderCard extends StatelessWidget {
   final SlidingCardController slidingCardController;
   final List<bool> daySelection;
   final Function onCardTapped;
@@ -14,6 +14,7 @@ class ReminderCard extends StatelessWidget {
   final Function onSwitchChanged;
   final Function onTimePressed;
   final String label;
+  final String days;
   final Color cardColor;
   final bool switchStatus;
   final TimeOfDay setTime;
@@ -22,18 +23,18 @@ class ReminderCard extends StatelessWidget {
     Key key,
     this.slidingCardController,
     @required this.daySelection,
-    @required this.onCardTapped, 
+    @required this.onCardTapped,
     @required this.addLabel,
-    @required this.delete, 
-    @required this.onSwitchChanged, 
+    @required this.delete,
+    @required this.onSwitchChanged,
     @required this.label,
-    @required this.cardColor, 
-    @required this.toggleDays, 
-    @required this.switchStatus, 
-    @required this.onTimePressed, 
-    @required this.setTime, 
-  }): super(key: key);
-  
+    @required this.days,
+    @required this.cardColor,
+    @required this.toggleDays,
+    @required this.switchStatus,
+    @required this.onTimePressed,
+    @required this.setTime,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +53,9 @@ class ReminderCard extends StatelessWidget {
           onSwitchChanged: onSwitchChanged,
           onTimePressed: onTimePressed,
           switchStatus: switchStatus,
-          cardColor: cardColor, 
+          cardColor: cardColor,
           label: label,
+          days: days,
           time: setTime,
         ),
         backCardWidget: BackReminderCard(
@@ -61,8 +63,8 @@ class ReminderCard extends StatelessWidget {
           addLabel: addLabel,
           toggleDays: toggleDays,
           daySelection: daySelection,
-          delete: delete, 
-          label: label, 
+          delete: delete,
+          label: label,
         ),
       ),
     );

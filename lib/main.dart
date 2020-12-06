@@ -2,18 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:inhalen/services/colors.dart';
 import 'package:inhalen/pages/home.dart';
 import 'package:inhalen/pages/schedule.dart';
+import 'package:inhalen/services/reminder_model.dart';
+import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_wrapper.dart';
 
 void main() {
-  runApp(MaterialApp(
-    title: 'Flutter Demo',
-    theme: ThemeData(
-      visualDensity: VisualDensity.adaptivePlatformDensity,
+  runApp(ChangeNotifierProvider<ReminderModel>(
+    create: (context) => ReminderModel(),
+    child: MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      routes: {
+        '/': (context) => ResponsiveWrapper.builder(
+              Screen(),
+              maxWidth: 1200,
+              minWidth: 480,
+              defaultScale: true,
+              breakpoints: [
+                ResponsiveBreakpoint.resize(350, name: MOBILE),
+                ResponsiveBreakpoint.autoScale(800, name: TABLET),
+                ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+              ],
+            ),
+      },
     ),
-    routes: {
-      '/': (context) => Screen(),
-      // '/home': (context) => Screen(),
-      // 'schedule': (context) => SchedulePage(),
-    },
   ));
 }
 
@@ -32,12 +46,13 @@ class _ScreenState extends State<Screen> {
   }
 
   // Function to get current Page
-  Widget _getBody() {
+  Widget _getBody(BuildContext context) {
     switch (_currentIndex) {
       case 0:
         return HomePage();
       case 1:
-        return SchedulePage();
+        return Consumer<ReminderModel>(
+            builder: (context, _reminderModel, child) => SchedulePage());
     }
     return HomePage();
   }
@@ -47,7 +62,7 @@ class _ScreenState extends State<Screen> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
-      body: _getBody(),
+      body: _getBody(context),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
