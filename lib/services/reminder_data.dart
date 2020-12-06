@@ -15,9 +15,21 @@ class ReminderData {
     this.switchON,
     this.cardColor,
     this.daySelection,
-  }) : controller = SlidingCardController();
+  }) : controller = new SlidingCardController();
 
-  Map<String, dynamic> toMap() {}
+  void fromMap(Map map) {
+    this.time = TimeOfDay(hour: map['hour'], minute: map['minute']);
+    this.label = map['label'] ?? 'label';
+    this.switchON = (map['switchON'] == 1);
+    this.cardColor = Color(map['cardColor']);
+  }
 
-  ReminderData.fromMap(Map<String, dynamic> map) {}
+  Map<String, dynamic> toMap(int index) => {
+        'id': index,
+        'hour': this.time.hour,
+        'minute': this.time.minute,
+        'label': this.label,
+        'switchON': (this.switchON) ? 1 : 0,
+        'cardColor': this.cardColor.value
+      };
 }

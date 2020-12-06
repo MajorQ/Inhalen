@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:inhalen/services/colors.dart';
+import 'package:inhalen/services/reminder_model.dart';
 import 'package:inhalen/pages/home.dart';
 import 'package:inhalen/pages/schedule.dart';
-import 'package:inhalen/services/reminder_model.dart';
 
 void main() {
   runApp(ChangeNotifierProvider<ReminderModel>(
@@ -26,7 +26,17 @@ class Screen extends StatefulWidget {
 }
 
 class _ScreenState extends State<Screen> {
-  // Bottom navigation bar control
+  ReminderModel _reminderModel;
+
+  void initState() {
+    super.initState();
+    _reminderModel = Provider.of<ReminderModel>(context, listen: false);
+    _reminderModel
+        .fetchListFromStorage()
+        .then((value) => print('Database Initialized'));
+  }
+
+  // Bottom navigation bar   control
   int _currentIndex = 0;
   void _changeIndex(index) {
     setState(() {
@@ -35,7 +45,7 @@ class _ScreenState extends State<Screen> {
   }
 
   // Function to get current Page
-  Widget _getBody(BuildContext context) {
+  Widget _getScaffoldBody(BuildContext context) {
     switch (_currentIndex) {
       case 0:
         return HomePage();
@@ -50,7 +60,7 @@ class _ScreenState extends State<Screen> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
-      body: _getBody(context),
+      body: _getScaffoldBody(context),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
