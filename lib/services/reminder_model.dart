@@ -54,4 +54,5 @@ class ReminderModel extends ChangeNotifier {
     _reminders[index].label = value;
     notifyListeners();
   }
+
 }

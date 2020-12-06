@@ -7,101 +7,110 @@ import 'package:provider/provider.dart';
 
 class SchedulePage extends StatelessWidget {
   final GlobalKey<FormState> labelKey = GlobalKey<FormState>();
-
+  
   @override
   Widget build(BuildContext context) {
     ReminderModel _reminderModel = Provider.of<ReminderModel>(context);
     List<ReminderData> reminders = _reminderModel.getList;
     return Container(
-        color: Colors.white,
-        child: Stack(alignment: Alignment.topCenter, children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 55.0, 0, 0),
-            child: Text(
-                'Tambahkan reminder agar Anda\ntidak lupa menggunakan obat!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20.0,
-                  letterSpacing: 0.15,
-                  fontFamily: 'Raleway',
-                  fontStyle: FontStyle.normal,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black,
-                )),
+      color: Colors.white,
+      child: Stack(alignment: Alignment.topCenter, children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 55.0, 0, 0),
+          child: Text(
+            'Tambahkan reminder agar Anda\ntidak lupa menggunakan obat!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20.0,
+              letterSpacing: 0.15,
+              fontFamily: 'Raleway',
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+          )),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 131, 0, 105),
+            child: Consumer<ReminderModel>(
+              builder: (context, _reminderModel, child) {
+                return ListView.builder(
+                  itemCount: reminders.length,
+                  itemBuilder: (context, index) {
+                  return Center(
+                    child: ReminderCard(
+                      key: ObjectKey(reminders[index]),
+                      setTime: reminders[index].time,
+                      switchStatus: reminders[index].switchON,
+                      cardColor: reminders[index].cardColor,
+                      label: reminders[index].label,
+                      slidingCardController: reminders[index].controller,
+                      daySelection: reminders[index].daySelection,
+                      days: reminders[index].days,
+                      onTimePressed: () => pickTime(context, _reminderModel, index),
+                      onSwitchChanged: (bool state) => _reminderModel.changeSwitch(state, index),
+                      addLabel: () => pickLabel(context, _reminderModel, index),
+                      toggleDays: (day) => _reminderModel.toggleDays(day, index),
+                      delete: () {
+                      return _reminderModel.delete(index);  
+                      },
+                      onCardTapped: () {
+                        if (reminders[index].controller.isCardSeparated == true) {
+                          reminders[index].controller.collapseCard();
+                        } 
+                        else {
+                          reminders[index].controller.expandCard();
+                          for (int i = 0; i < reminders.length; ++i) {
+                            if (i == index) {
+                              continue;
+                            }
+                            else {
+                              reminders[i].controller.collapseCard();
+                            }
+                          }
+                        }
+                      }),
+                    );
+                });
+              },
+            ),
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 131, 0, 105),
-              child: Consumer<ReminderModel>(
-                builder: (context, _reminderModel, child) {
-                  return ListView.builder(
-                      itemCount: reminders.length,
-                      itemBuilder: (context, index) {
-                        return Center(
-                          child: ReminderCard(
-                              setTime: reminders[index].time,
-                              switchStatus: reminders[index].switchON,
-                              cardColor: reminders[index].cardColor,
-                              label: reminders[index].label,
-                              slidingCardController: reminders[index].controller,
-                              daySelection: reminders[index].daySelection,
-                              days: reminders[index].days,
-                              onTimePressed: () => pickTime(context, _reminderModel, index),
-                              onSwitchChanged: (bool state) => _reminderModel.changeSwitch(state, index),
-                              addLabel: () => pickLabel(context, _reminderModel, index),
-                              toggleDays: (day) => _reminderModel.toggleDays(day, index),
-                              delete: () async => _reminderModel.delete(index),
-                              onCardTapped: () {
-                                if (reminders[index].controller.isCardSeparated == true) {
-                                  reminders[index].controller.collapseCard();
-                                } 
-                                else {
-                                  reminders[index].controller.expandCard();
-                                  for (int i = 0; i < reminders.length; ++i) {
-                                    if (i == index) {
-                                      continue;
-                                    }
-                                    else {
-                                      reminders[i].controller.collapseCard();
-                                    }
-                                  }
-                                }
-                              }),
-                        );
-                      });
-                },
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: FloatingActionButton(
+              backgroundColor: CustomColors.maroon,
+              foregroundColor: Colors.black,
+              onPressed: () async {
+                _reminderModel.add();
+                int last = reminders.length-1;
+                var currentTime = await pickTime(context, _reminderModel, last);
+                if (currentTime != null) {
+                  _reminderModel.pickTime(last, currentTime);
+                }
+                else {
+                  _reminderModel.delete(last);
+                }
+              },
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: FloatingActionButton(
-                backgroundColor: CustomColors.maroon,
-                foregroundColor: Colors.black,
-                onPressed: () {
-                  _reminderModel.add();
-                  pickTime(context, _reminderModel, reminders.length - 1);
-                },
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          )
-        ]));
+        )
+    ]));
   }
 
   // Function for time picker
-  pickTime(BuildContext context, ReminderModel _reminderModel, int i) async {
+  Future<TimeOfDay> pickTime(BuildContext context, ReminderModel _reminderModel, int i) async {
     TimeOfDay _time = await showTimePicker(
       context: context,
       initialTime: _reminderModel.getTime(i),
       cancelText: 'Cancel',
       helpText: 'Select Time',
-      // helpText: ,
       builder: (BuildContext context, Widget child) {
         return Theme(
           data: ThemeData(
@@ -143,12 +152,10 @@ class SchedulePage extends StatelessWidget {
      }
     );
 
-    if (_time != null) {
+    if (_time != null)
       _reminderModel.pickTime(i, _time);
-    }
-    else {
-      _reminderModel.delete(i);
-    }
+
+    return _time;
   }
 
   //function for label picker
