@@ -20,17 +20,17 @@ class ReminderData {
   }) : controller = new SlidingCardController();
 
   void getDays() {
-    List<String> _dayList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    bool _first = true;
+    List<String> dayList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    bool first = true;
 
     if (daySelection.contains(true) && daySelection.contains(false)) {
-      for (int day = 0; day < _dayList.length; day++) {
+      for (int day = 0; day < dayList.length; day++) {
         if (daySelection[day] == true) {
-          if (_first) {
-            days = _dayList[day];
-            _first = false;
+          if (first) {
+            days = dayList[day];
+            first = false;
           } else {
-            days = days + ', ' + _dayList[day];
+            days = days + ', ' + dayList[day];
           }
         }
       }

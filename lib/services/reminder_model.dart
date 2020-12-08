@@ -87,7 +87,8 @@ class ReminderModel extends ChangeNotifier {
 
   // Change the reminder label value from a specific index, then performs an update
   void changeLabelOnIndex(int index, String value) {
-    _reminders[index].label = value ?? 'label';
+    value = (value == '' ? 'Label' : value);
+    _reminders[index].label = value;
     _localStorage.updateReminder(index, _reminders[index].toMap(index));
     notifyListeners();
   }

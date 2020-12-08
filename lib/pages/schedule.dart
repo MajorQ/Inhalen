@@ -6,12 +6,12 @@ import 'package:inhalen/widgets/reminder_card/reminder_card.dart';
 import 'package:provider/provider.dart';
 
 class SchedulePage extends StatelessWidget {
-  final GlobalKey<FormState> labelKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _labelKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    ReminderModel _reminderModel = Provider.of<ReminderModel>(context);
-    List<ReminderData> reminders = _reminderModel.getList;
+    ReminderModel reminderModel = Provider.of<ReminderModel>(context);
+    List<ReminderData> reminders = reminderModel.getList;
     return Container(
         color: Colors.white,
         child: Stack(alignment: Alignment.topCenter, children: <Widget>[
@@ -32,53 +32,45 @@ class SchedulePage extends StatelessWidget {
           Center(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 131, 0, 105),
-              child: Consumer<ReminderModel>(
-                builder: (context, _reminderModel, child) {
-                  return ListView.builder(
-                      itemCount: reminders.length,
-                      itemBuilder: (context, index) {
-                        return Center(
-                          child: ReminderCard(
-                              key: ObjectKey(reminders[index]),
-                              setTime: reminders[index].time,
-                              switchStatus: reminders[index].switchON,
-                              cardColor: reminders[index].cardColor,
-                              label: reminders[index].label,
-                              slidingCardController:
-                                  reminders[index].controller,
-                              daySelection: reminders[index].daySelection,
-                              days: reminders[index].days,
-                              onTimePressed: () =>
-                                  pickTime(context, _reminderModel, index),
-                              onSwitchChanged: (bool state) => _reminderModel
-                                  .changeSwitchOnIndex(state, index),
-                              addLabel: () =>
-                                  pickLabel(context, _reminderModel, index),
-                              toggleDays: (day) =>
-                                  _reminderModel.toggleDays(day, index),
-                              delete: () =>
-                                  _reminderModel.deleteReminder(index),
-                              onCardTapped: () {
-                                if (reminders[index]
-                                        .controller
-                                        .isCardSeparated ==
-                                    true) {
-                                  reminders[index].controller.collapseCard();
+              child: ListView.builder(
+                  itemCount: reminders.length,
+                  itemBuilder: (context, index) {
+                    return Center(
+                      child: ReminderCard(
+                          key: ObjectKey(reminders[index]),
+                          setTime: reminders[index].time,
+                          switchStatus: reminders[index].switchON,
+                          cardColor: reminders[index].cardColor,
+                          label: reminders[index].label,
+                          slidingCardController: reminders[index].controller,
+                          daySelection: reminders[index].daySelection,
+                          days: reminders[index].days,
+                          onTimePressed: () =>
+                              pickTime(context, reminderModel, index),
+                          onSwitchChanged: (bool state) =>
+                              reminderModel.changeSwitchOnIndex(state, index),
+                          addLabel: () =>
+                              pickLabel(context, reminderModel, index),
+                          toggleDays: (day) =>
+                              reminderModel.toggleDays(day, index),
+                          delete: () => reminderModel.deleteReminder(index),
+                          onCardTapped: () {
+                            if (reminders[index].controller.isCardSeparated ==
+                                true) {
+                              reminders[index].controller.collapseCard();
+                            } else {
+                              reminders[index].controller.expandCard();
+                              for (int i = 0; i < reminders.length; ++i) {
+                                if (i == index) {
+                                  continue;
                                 } else {
-                                  reminders[index].controller.expandCard();
-                                  for (int i = 0; i < reminders.length; ++i) {
-                                    if (i == index) {
-                                      continue;
-                                    } else {
-                                      reminders[i].controller.collapseCard();
-                                    }
-                                  }
+                                  reminders[i].controller.collapseCard();
                                 }
-                              }),
-                        );
-                      });
-                },
-              ),
+                              }
+                            }
+                          }),
+                    );
+                  }),
             ),
           ),
           Align(
@@ -89,14 +81,14 @@ class SchedulePage extends StatelessWidget {
                 backgroundColor: CustomColors.maroon,
                 foregroundColor: Colors.black,
                 onPressed: () async {
-                  _reminderModel.addReminder();
+                  reminderModel.addReminder();
                   int last = reminders.length - 1;
                   var currentTime =
-                      await pickTime(context, _reminderModel, last);
+                      await pickTime(context, reminderModel, last);
                   if (currentTime != null) {
-                    _reminderModel.changeTimeOnIndex(last, currentTime);
+                    reminderModel.changeTimeOnIndex(last, currentTime);
                   } else {
-                    _reminderModel.deleteReminder(last);
+                    reminderModel.deleteReminder(last);
                   }
                 },
                 child: Icon(
@@ -111,10 +103,10 @@ class SchedulePage extends StatelessWidget {
 
   // Function for time picker
   Future<TimeOfDay> pickTime(
-      BuildContext context, ReminderModel _reminderModel, int i) async {
+      BuildContext context, ReminderModel reminderModel, int i) async {
     TimeOfDay _time = await showTimePicker(
         context: context,
-        initialTime: _reminderModel.getTimeFromIndex(i),
+        initialTime: reminderModel.getTimeFromIndex(i),
         cancelText: 'Cancel',
         helpText: 'Select Time',
         builder: (BuildContext context, Widget child) {
@@ -158,13 +150,13 @@ class SchedulePage extends StatelessWidget {
           );
         });
 
-    if (_time != null) _reminderModel.changeTimeOnIndex(i, _time);
+    if (_time != null) reminderModel.changeTimeOnIndex(i, _time);
 
     return _time;
   }
 
   //function for label picker
-  pickLabel(BuildContext context, ReminderModel _reminderModel, int i) async {
+  pickLabel(BuildContext context, ReminderModel reminderModel, int i) async {
     showDialog(
         context: context,
         builder: (context) {
@@ -172,7 +164,7 @@ class SchedulePage extends StatelessWidget {
           return AlertDialog(
             backgroundColor: CustomColors.yellow,
             content: Form(
-              key: labelKey,
+              key: _labelKey,
               child: TextFormField(
                 decoration: InputDecoration(
                     labelText: 'Label',
@@ -189,7 +181,7 @@ class SchedulePage extends StatelessWidget {
                 maxLength: 8,
                 keyboardType: TextInputType.name,
                 onSaved: (String value) {
-                  _reminderModel.changeLabelOnIndex(i, value);
+                  reminderModel.changeLabelOnIndex(i, value);
                 },
                 validator: (String value) {
                   return value.length > 8
@@ -214,8 +206,8 @@ class SchedulePage extends StatelessWidget {
               FlatButton(
                 // textColor: CustomColors.maroon,
                 onPressed: () {
-                  if (labelKey.currentState.validate()) {
-                    labelKey.currentState.save();
+                  if (_labelKey.currentState.validate()) {
+                    _labelKey.currentState.save();
                     Navigator.of(context).pop();
                   }
                 },
