@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:inhalen/services/colors.dart';
+import 'package:inhalen/services/reminder_data.dart';
 
 class BackReminderCard extends StatelessWidget {
-  final List<bool> daySelection;
   final Function addLabel;
   final Function toggleDays;
   final Function delete;
-  final Color cardColor;
-  final String label;
+  final ReminderData reminderObject;
 
   const BackReminderCard({
     Key key,
-    @required this.daySelection,
     @required this.addLabel,
     @required this.toggleDays,
     @required this.delete,
-    @required this.cardColor,
-    @required this.label,
+    @required this.reminderObject,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: cardColor,
+      color: reminderObject.cardColor,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(const Radius.circular(10))),
       child: Stack(
@@ -53,7 +50,7 @@ class BackReminderCard extends StatelessWidget {
                 maxHeight: 60.0,
               ),
               onPressed: toggleDays,
-              isSelected: daySelection,
+              isSelected: reminderObject.daySelection,
               borderRadius: BorderRadius.circular(30),
               borderColor: CustomColors.black,
               borderWidth: 1.5,
@@ -67,7 +64,8 @@ class BackReminderCard extends StatelessWidget {
               // Widget for changing reminder label
               FlatButton.icon(
                 onPressed: addLabel,
-                label: Text('$label',
+                label: Text(
+                  '${reminderObject.label}',
                   style: TextStyle(
                     color: CustomColors.black,
                     fontFamily: 'OpenSans',
@@ -78,7 +76,8 @@ class BackReminderCard extends StatelessWidget {
               // Widget for deleting reminder card
               FlatButton.icon(
                 onPressed: delete,
-                label: Text('Delete',
+                label: Text(
+                  'Delete',
                   style: TextStyle(
                     color: CustomColors.black,
                     fontFamily: 'OpenSans',
