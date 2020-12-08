@@ -21,7 +21,6 @@ final String columnDaySaturday = 'saturday';
 final String columnDaySunday = 'sunday';
 
 // NOTE: try to decrease number of columns, or create a new table in the future
-
 class DatabaseHelper {
   // A database instance
   Database _db;
@@ -29,19 +28,31 @@ class DatabaseHelper {
   // Open database
   Future open() async {
     if (_db == null) {
-      String path = await getDatabasesPath() + 'database.db';
+      String path;
+      try {
+        path = await getDatabasesPath() + 'database.db';
+      } catch (_) {
+        print('Path error');
+        return -1;
+      }
       _db = await openDatabase(path, version: 2,
           onCreate: (Database db, int version) async {
+        // Dev NOTE: figure out a way to make this column more efficient in the future
         await db.execute('''
           CREATE TABLE $tableReminder (
-            $columnId int NOT NULL,
-            $columnTimeHour int NOT NULL,
-            $columnTimeMinute int NOT NULL,
-            $columnLabel text,
-            $columnSwitchON int NOT NULL,
-            $columnCardColor int NOT NULL
-          );
-      ''');
+              $columnId int NOT NULL,
+              $columnTimeHour int NOT NULL,
+              $columnTimeMinute int NOT NULL,
+              $columnLabel text,
+              $columnSwitchON int NOT NULL,
+              $columnDayMonday int NOT NULL,
+              $columnDayTuesday int NOT NULL,
+              $columnDayWednesday int NOT NULL,
+              $columnDayThursday int NOT NULL,
+              $columnDayFriday int NOT NULL,
+              $columnDaySaturday int NOT NULL,
+              $columnDaySunday int NOT NULL
+          );''');
       });
     }
   }
@@ -86,33 +97,20 @@ class DatabaseHelper {
         $columnTimeMinute int NOT NULL,
         $columnLabel text,
         $columnSwitchON int NOT NULL,
-        $columnCardColor int NOT NULL
+        $columnDayMonday int NOT NULL,
+        $columnDayTuesday int NOT NULL,
+        $columnDayWednesday int NOT NULL,
+        $columnDayThursday int NOT NULL,
+        $columnDayFriday int NOT NULL,
+        $columnDaySaturday int NOT NULL,
+        $columnDaySunday int NOT NULL
       );''');
   }
 
   // This function can be used to clear the database in case of an error
-  Future<void> deleteALL() async {
-    await _db.rawDelete('''DELETE FROM $tableReminder;''');
-    await deleteDatabase(await getDatabasesPath() + 'database.db');
+  Future<void> dropTable() async {
+    await _db.execute('''DROP TABLE $tableReminder;''');
   }
 
   Future close() async => _db.close();
 }
-
-// Unused at the moment
-
-// $columnDayMonday int,
-// $columnDayTuesday int,
-// $columnDayWednesday int,
-// $columnDayThursday int,
-// $columnDayFriday int,
-// $columnDaySaturday int,
-// $columnDaySunday int,
-
-// columnDayMonday,
-// columnDayTuesday,
-// columnDayWednesday,
-// columnDayThursday,
-// columnDayFriday,
-// columnDaySaturday,
-// columnDaySunday

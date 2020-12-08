@@ -29,7 +29,7 @@ class _ScreenState extends State<Screen> {
   // A ReminderModel instance for initialization
   ReminderModel _reminderModel;
 
-  // Initialize ReminderModel instance by fetching list from the local storage
+  // Initialize ReminderModel instance then fetch list from the local storage
   void initState() {
     super.initState();
     _reminderModel = Provider.of<ReminderModel>(context, listen: false);

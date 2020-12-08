@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:inhalen/services/colors.dart';
 import 'package:sliding_card/sliding_card.dart';
 
 class ReminderData {
   TimeOfDay time;
   String label;
-  String days;
   bool switchON;
-  Color cardColor;
   List<bool> daySelection;
   SlidingCardController controller;
 
   ReminderData({
     this.time,
     this.label,
-    this.days,
     this.switchON,
-    this.cardColor,
     this.daySelection,
   }) : controller = new SlidingCardController();
 
-  void getDays() {
+  String get getDays {
+    String days = '';
     List<String> dayList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     bool first = true;
 
@@ -41,13 +39,28 @@ class ReminderData {
         days = 'Select day';
       }
     }
+    return days;
+  }
+
+  Color get cardColor {
+    if (switchON)
+      return CustomColors.yellow;
+    else
+      return CustomColors.lightGray;
   }
 
   void fromMap(Map map) {
     this.time = TimeOfDay(hour: map['hour'], minute: map['minute']);
     this.label = map['label'] ?? 'label';
     this.switchON = (map['switchON'] == 1);
-    this.cardColor = Color(map['cardColor']);
+    // Get daySelection
+    this.daySelection[0] = (map['monday'] == 1);
+    this.daySelection[1] = (map['tuesday'] == 1);
+    this.daySelection[2] = (map['wednesday'] == 1);
+    this.daySelection[3] = (map['thursday'] == 1);
+    this.daySelection[4] = (map['friday'] == 1);
+    this.daySelection[5] = (map['saturday'] == 1);
+    this.daySelection[6] = (map['sunday'] == 1);
   }
 
   Map<String, dynamic> toMap(int index) => {
@@ -56,6 +69,13 @@ class ReminderData {
         'minute': this.time.minute,
         'label': this.label,
         'switchON': (this.switchON) ? 1 : 0,
-        'cardColor': this.cardColor.value
+        // Set daySelection
+        'monday': (this.daySelection[0]) ? 1 : 0,
+        'tuesday': (this.daySelection[1]) ? 1 : 0,
+        'wednesday': (this.daySelection[2]) ? 1 : 0,
+        'thursday': (this.daySelection[3]) ? 1 : 0,
+        'friday': (this.daySelection[4]) ? 1 : 0,
+        'saturday': (this.daySelection[5]) ? 1 : 0,
+        'sunday': (this.daySelection[6]) ? 1 : 0,
       };
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:inhalen/services/colors.dart';
 import 'package:inhalen/services/reminder_model.dart';
 import 'package:inhalen/services/reminder_data.dart';
 import 'package:inhalen/widgets/reminder_card/reminder_card.dart';
-import 'package:provider/provider.dart';
 
 class SchedulePage extends StatelessWidget {
   final GlobalKey<FormState> _labelKey = GlobalKey<FormState>();
@@ -38,13 +38,7 @@ class SchedulePage extends StatelessWidget {
                     return Center(
                       child: ReminderCard(
                           key: ObjectKey(reminders[index]),
-                          setTime: reminders[index].time,
-                          switchStatus: reminders[index].switchON,
-                          cardColor: reminders[index].cardColor,
-                          label: reminders[index].label,
-                          slidingCardController: reminders[index].controller,
-                          daySelection: reminders[index].daySelection,
-                          days: reminders[index].days,
+                          reminderObject: reminders[index],
                           onTimePressed: () =>
                               pickTime(context, reminderModel, index),
                           onSwitchChanged: (bool state) =>

@@ -1,33 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:inhalen/services/colors.dart';
+import 'package:inhalen/services/reminder_data.dart';
 
 class FrontReminderCard extends StatelessWidget {
   final Function onSwitchChanged;
   final Function onTimePressed;
-  final bool switchStatus;
-  final Color cardColor;
-  final String label;
-  final String days;
-  final TimeOfDay time;
+  final ReminderData reminderObject;
 
-  const FrontReminderCard({
-    Key key,
-    @required this.onSwitchChanged,
-    @required this.onTimePressed,
-    @required this.switchStatus,
-    @required this.cardColor,
-    @required this.label,
-    @required this.days,
-    @required this.time, 
-  }) : super(key: key);
+  const FrontReminderCard(
+      {Key key,
+      @required this.onSwitchChanged,
+      @required this.onTimePressed,
+      @required this.reminderObject})
+      : super(key: key);
 
   // bool switchON = true;
 
   @override
   Widget build(BuildContext context) {
+    TimeOfDay time = reminderObject.time;
     return Card(
-      color: cardColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(const Radius.circular(10))),
+      color: reminderObject.cardColor,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(const Radius.circular(10))),
       child: Stack(
         alignment: AlignmentDirectional.centerStart,
         children: <Widget>[
@@ -42,10 +37,13 @@ class FrontReminderCard extends StatelessWidget {
                   child: FlatButton(
                     onPressed: onTimePressed,
                     child: Text(
-                      time.hour < 10 && time.minute < 10 ? '0${time.hour}:0${time.minute}': 
-                      time.hour < 10 ? '0${time.hour}:${time.minute}':
-                      time.minute < 10 ? '${time.hour}:0${time.minute}':
-                      '${time.hour}:${time.minute}',
+                        time.hour < 10 && time.minute < 10
+                            ? '0${time.hour}:0${time.minute}'
+                            : time.hour < 10
+                                ? '0${time.hour}:${time.minute}'
+                                : time.minute < 10
+                                    ? '${time.hour}:0${time.minute}'
+                                    : '${time.hour}:${time.minute}',
                         style: TextStyle(
                           fontSize: 40.0,
                           letterSpacing: 0.5,
@@ -61,7 +59,7 @@ class FrontReminderCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     //Days
-                    Text('$days',
+                    Text('${reminderObject.getDays}',
                         style: TextStyle(
                           fontSize: 16.0,
                           letterSpacing: 0.15,
@@ -71,14 +69,18 @@ class FrontReminderCard extends StatelessWidget {
                           color: CustomColors.black,
                         )),
                     //separator
-                    Text(label=='Label' ? '':' \u2022 ',
+                    Text(
+                      reminderObject.label == 'Label' ? '' : ' \u2022 ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: CustomColors.black,
                       ),
                     ),
-                    Text(label=='Label' ? '':'$label',
+                    Text(
+                        reminderObject.label == 'Label'
+                            ? ''
+                            : '${reminderObject.label}',
                         style: TextStyle(
                           fontSize: 16.0,
                           letterSpacing: 0.15,
@@ -96,7 +98,7 @@ class FrontReminderCard extends StatelessWidget {
             left: 294,
             child: Switch(
               activeColor: CustomColors.blue,
-              value: switchStatus,
+              value: reminderObject.switchON,
               onChanged: onSwitchChanged,
             ),
           ),

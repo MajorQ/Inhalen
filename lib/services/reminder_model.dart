@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:inhalen/services/colors.dart';
 import 'package:inhalen/services/reminder_data.dart';
 import 'package:inhalen/services/database_helper.dart';
 
@@ -38,8 +37,6 @@ class ReminderModel extends ChangeNotifier {
       time: TimeOfDay.now(),
       label: 'Label',
       switchON: true,
-      days: 'Select day',
-      cardColor: CustomColors.yellow,
       daySelection: List.generate(7, (index) => false),
     );
     _reminders.add(newReminder);
@@ -61,20 +58,13 @@ class ReminderModel extends ChangeNotifier {
   // Performs an update operation on the database
   void changeSwitchOnIndex(bool state, int index) {
     _reminders[index].switchON = state;
-
-    if (_reminders[index].switchON == true) {
-      _reminders[index].cardColor = CustomColors.yellow;
-    } else {
-      _reminders[index].cardColor = CustomColors.lightGray;
-    }
     _localStorage.updateReminder(index, _reminders[index].toMap(index));
     notifyListeners();
   }
 
   void toggleDays(dynamic day, int index) {
     _reminders[index].daySelection[day] = !_reminders[index].daySelection[day];
-    _reminders[index].getDays();
-    // _localStorage.updateReminder(index, column, value)
+    _localStorage.updateReminder(index, _reminders[index].toMap(index));
     notifyListeners();
   }
 
