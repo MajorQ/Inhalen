@@ -4,19 +4,20 @@ import 'package:inhalen/services/database_helper.dart';
 
 class ReminderModel extends ChangeNotifier {
   // List of ReminderData and a DatabaseHelper instance
-  List<ReminderData> _reminders = new List();
+  static List<ReminderData> _reminders = new List();
   DatabaseHelper _localStorage = new DatabaseHelper();
 
   // Getter function that returns the list of reminders
   List<ReminderData> get getList => _reminders;
+
+  int get length => _reminders.length;
 
   // Opens a database on a ReminderHelper instance and reads from the database
   //
   // Read operation returns a list of maps, then the map is converted to ReminderData
   // and added to the reminders list
   Future<void> fetchListFromStorage() async {
-    await _localStorage.open();
-    List<Map> maps = await _localStorage.readReminders() ?? [];
+    List<Map> maps = await _localStorage.readReminders();
     if (maps != null) {
       for (int index = 0; index < maps.length; index++) {
         ReminderData newReminder =
@@ -24,7 +25,10 @@ class ReminderModel extends ChangeNotifier {
         newReminder.fromMap(maps[index]);
         _reminders.add(newReminder);
       }
+    } else {
+      _reminders = [];
     }
+    notifyListeners();
   }
 
   // Returns the time TimeOfDay instance from a specific index
