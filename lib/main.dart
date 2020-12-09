@@ -1,114 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:inhalen/services/colors.dart';
+import 'package:inhalen/screen.dart';
 import 'package:inhalen/services/reminder_model.dart';
-import 'package:inhalen/pages/home.dart';
-import 'package:inhalen/pages/schedule.dart';
+import 'package:inhalen/services/settings_model.dart';
+import 'package:inhalen/services/database_helper.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider<ReminderModel>(
-    create: (context) => ReminderModel(),
-    child: MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      routes: {
-        '/': (context) => Screen(),
-      },
-    ),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => ReminderModel()),
+      ChangeNotifierProvider(create: (context) => SettingsModel()),
+    ],
+    child: Application(),
   ));
 }
 
-class Screen extends StatefulWidget {
+// The application
+class Application extends StatefulWidget {
   @override
-  _ScreenState createState() => _ScreenState();
+  _ApplicationState createState() => _ApplicationState();
 }
 
-class _ScreenState extends State<Screen> {
-  // A ReminderModel instance for initialization
-  ReminderModel _reminderModel;
-
-  // Initialize ReminderModel instance then fetch list from the local storage
+class _ApplicationState extends State<Application> {
+  // This function will:
+  // a. Initialize all models and the database instance
+  // b. Fetch settings from the local storage to the settings model
+  // c. Fetch list from the local storage to the reminder model
   void initState() {
-    super.initState();
+    // set temporary variables
+    DatabaseHelper _databaseHelper = new DatabaseHelper();
+    ReminderModel _reminderModel = new ReminderModel();
+    SettingsModel _settingsModel = new SettingsModel();
+
+    // initialize models
     _reminderModel = Provider.of<ReminderModel>(context, listen: false);
-    _reminderModel
-        .fetchListFromStorage()
-        .then((value) => print('Database Initialized'));
-  }
+    _settingsModel = Provider.of<SettingsModel>(context, listen: false);
 
-  // Change the index of bottom navigation bar based on touch
-  int _currentIndex = 0;
-  void _changeIndex(index) {
-    setState(() {
-      _currentIndex = index;
+    // initialize database and load to the models
+    _databaseHelper.initializeDatabase().then((_) {
+      _settingsModel.fetchSettingsFromStorage();
+      _reminderModel.fetchListFromStorage();
     });
-  }
 
-  // Function to get current page based on index
-  Widget _getScaffoldBody(BuildContext context) {
-    switch (_currentIndex) {
-      case 0:
-        return HomePage();
-      case 1:
-        return SchedulePage();
-    }
-    return HomePage();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-      backgroundColor: Colors.white,
-      body: _getScaffoldBody(context),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
-              color: Colors.grey.withOpacity(0.8),
-              blurRadius: 4.0,
-              spreadRadius: 4.0,
-              offset: Offset(0.0, 4.0)),
-        ]),
-        child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            currentIndex: _currentIndex,
-            onTap: _changeIndex,
-            iconSize: 32.0,
-            selectedIconTheme: IconThemeData(size: 40.0),
-            selectedLabelStyle: TextStyle(
-                fontFamily: 'OpenSans',
-                fontSize: 16.0,
-                height: 1.5,
-                letterSpacing: 0.4),
-            unselectedLabelStyle: TextStyle(
-                fontFamily: 'OpenSans',
-                fontSize: 14.0,
-                height: 1.5,
-                letterSpacing: 0.4),
-            unselectedItemColor: Colors.black.withOpacity(0.38),
-            selectedItemColor: CustomColors.maroon,
-            showUnselectedLabels: true,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.book),
-                label: 'Belajar',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.alarm),
-                label: 'Rutinitas',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.help),
-                label: 'Bantuan',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: 'Pengaturan',
-              ),
-            ]),
-      ),
-    ));
+    return MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: Screen());
   }
 }

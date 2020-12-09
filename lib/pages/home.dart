@@ -1,7 +1,8 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:inhalen/services/colors.dart';
+import 'package:inhalen/services/settings_model.dart';
 import 'package:inhalen/widgets/inhaler_object.dart';
 
 class HomePage extends StatelessWidget {
@@ -14,13 +15,18 @@ class HomePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('Halo, Salman',
-                      style: TextStyle(
-                        fontFamily: "Raleway",
-                        color: CustomColors.maroon,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 39,
-                      )),
+                  Consumer<SettingsModel>(builder: (context, settingsModel, _) {
+                    return Text(
+                        (settingsModel.username != null)
+                            ? 'Halo, ${settingsModel.username}'
+                            : 'loading...',
+                        style: TextStyle(
+                          fontFamily: "Raleway",
+                          color: CustomColors.maroon,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 39,
+                        ));
+                  }),
                   SizedBox(height: 12.0),
                   Text(
                     'Ayo kita pelajari penggunaan Inhaler!',

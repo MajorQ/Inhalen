@@ -10,8 +10,6 @@ class SchedulePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ReminderModel reminderModel = Provider.of<ReminderModel>(context);
-    List<ReminderData> reminders = reminderModel.getList;
     return Container(
         color: Colors.white,
         child: Stack(alignment: Alignment.topCenter, children: <Widget>[
@@ -29,14 +27,15 @@ class SchedulePage extends StatelessWidget {
                   color: Colors.black,
                 )),
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 131, 0, 105),
-              child: ListView.builder(
-                  itemCount: reminders.length,
-                  itemBuilder: (context, index) {
-                    return Center(
-                      child: ReminderCard(
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 131, 0, 105),
+            child: Consumer<ReminderModel>(
+              builder: (context, reminderModel, _) {
+                List<ReminderData> reminders = reminderModel.getList;
+                return ListView.builder(
+                    itemCount: reminders.length,
+                    itemBuilder: (context, index) {
+                      return ReminderCard(
                           key: ObjectKey(reminders[index]),
                           reminderObject: reminders[index],
                           onTimePressed: () =>
@@ -62,9 +61,9 @@ class SchedulePage extends StatelessWidget {
                                 }
                               }
                             }
-                          }),
-                    );
-                  }),
+                          });
+                    });
+              },
             ),
           ),
           Align(
@@ -75,8 +74,10 @@ class SchedulePage extends StatelessWidget {
                 backgroundColor: CustomColors.maroon,
                 foregroundColor: Colors.black,
                 onPressed: () async {
+                  ReminderModel reminderModel =
+                      Provider.of<ReminderModel>(context, listen: false);
                   reminderModel.addReminder();
-                  int last = reminders.length - 1;
+                  int last = reminderModel.length - 1;
                   var currentTime =
                       await pickTime(context, reminderModel, last);
                   if (currentTime != null) {
