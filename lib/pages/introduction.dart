@@ -9,7 +9,7 @@ class OnBoardingPage extends StatefulWidget {
 }
 
 class _OnBoardingPageState extends State<OnBoardingPage> {
-  final introKey = GlobalKey<IntroductionScreenState>();
+  final _introKey = GlobalKey<IntroductionScreenState>();
 
   void _onIntroEnd(context) {
     Navigator.pushReplacementNamed(context, '/home');
@@ -27,7 +27,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     );
 
     return IntroductionScreen(
-      key: introKey,
+      key: _introKey,
       pages: [
         PageViewModel(
           title: "Fractional shares",
@@ -52,7 +52,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           body: "Another beautiful body text for this example onboarding",
           footer: RaisedButton(
             onPressed: () {
-              introKey.currentState?.animateScroll(0);
+              _introKey.currentState?.animateScroll(0);
             },
             child: const Text(
               'FooButton',

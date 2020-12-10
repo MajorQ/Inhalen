@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:inhalen/services/colors.dart';
-import 'package:inhalen/services/reminder_model.dart';
 import 'package:inhalen/services/reminder_data.dart';
+import 'package:inhalen/services/reminder_model.dart';
 import 'package:inhalen/widgets/reminder_card/reminder_card.dart';
 
 class SchedulePage extends StatelessWidget {

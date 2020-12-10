@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:inhalen/services/colors.dart';
 import 'package:sliding_card/sliding_card.dart';
+
+import 'package:inhalen/services/colors.dart';
 
 class ReminderData {
   TimeOfDay time;

@@ -1,6 +1,6 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:inhalen/services/colors.dart';
 import 'package:inhalen/services/settings_model.dart';
 import 'package:inhalen/widgets/inhaler_object.dart';

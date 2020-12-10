@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:inhalen/services/database_helper.dart';
 
 class SettingsModel extends ChangeNotifier {
-  DatabaseHelper _databaseHelper = new DatabaseHelper();
+  DatabaseHelper _databaseHelper = DatabaseHelper();
 
   String _username;
 

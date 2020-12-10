@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:inhalen/services/colors.dart';
+
 import 'package:inhalen/pages/home.dart';
 import 'package:inhalen/pages/schedule.dart';
+import 'package:inhalen/services/colors.dart';
 
 // The four main pages
 class Screen extends StatefulWidget {

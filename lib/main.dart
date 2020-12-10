@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:inhalen/screen.dart';
+import 'package:inhalen/services/database_helper.dart';
 import 'package:inhalen/services/reminder_model.dart';
 import 'package:inhalen/services/settings_model.dart';
-import 'package:inhalen/services/database_helper.dart';
 
 void main() {
   runApp(MultiProvider(
@@ -28,18 +29,18 @@ class _ApplicationState extends State<Application> {
   // c. Fetch list from the local storage to the reminder model
   void initState() {
     // set temporary variables
-    DatabaseHelper _databaseHelper = new DatabaseHelper();
-    ReminderModel _reminderModel = new ReminderModel();
-    SettingsModel _settingsModel = new SettingsModel();
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    ReminderModel reminderModel = ReminderModel();
+    SettingsModel settingsModel = SettingsModel();
 
     // initialize models
-    _reminderModel = Provider.of<ReminderModel>(context, listen: false);
-    _settingsModel = Provider.of<SettingsModel>(context, listen: false);
+    reminderModel = Provider.of<ReminderModel>(context, listen: false);
+    settingsModel = Provider.of<SettingsModel>(context, listen: false);
 
     // initialize database and load to the models
-    _databaseHelper.initializeDatabase().then((_) {
-      _settingsModel.fetchSettingsFromStorage();
-      _reminderModel.fetchListFromStorage();
+    databaseHelper.initializeDatabase().then((_) {
+      settingsModel.fetchSettingsFromStorage();
+      reminderModel.fetchListFromStorage();
     });
 
     super.initState();

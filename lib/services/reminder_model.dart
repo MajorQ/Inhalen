@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:inhalen/services/reminder_data.dart';
+
 import 'package:inhalen/services/database_helper.dart';
+import 'package:inhalen/services/reminder_data.dart';
 
 class ReminderModel extends ChangeNotifier {
   // List of ReminderData and a DatabaseHelper instance
-  static List<ReminderData> _reminders = new List();
-  DatabaseHelper _localStorage = new DatabaseHelper();
+  static List<ReminderData> _reminders = List();
+  DatabaseHelper _localStorage = DatabaseHelper();
 
   // Getter function that returns the list of reminders
   List<ReminderData> get getList => _reminders;
@@ -21,7 +22,7 @@ class ReminderModel extends ChangeNotifier {
     if (maps != null) {
       for (int index = 0; index < maps.length; index++) {
         ReminderData newReminder =
-            new ReminderData(daySelection: List.generate(7, (index) => false));
+            ReminderData(daySelection: List.generate(7, (index) => false));
         newReminder.fromMap(maps[index]);
         _reminders.add(newReminder);
       }
@@ -37,7 +38,7 @@ class ReminderModel extends ChangeNotifier {
   // Add a new reminder to the list, and perform a create operation on the database
   // using a Map created by the ReminderData instance
   void addReminder() {
-    ReminderData newReminder = new ReminderData(
+    ReminderData newReminder = ReminderData(
       time: TimeOfDay.now(),
       label: 'Label',
       switchON: true,
