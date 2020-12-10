@@ -97,7 +97,7 @@ class SchedulePage extends StatelessWidget {
         ]));
   }
 
-  // Function for time picker
+  /// Function to show time picker and change [time] on a [ReminderData] object
   Future<TimeOfDay> pickTime(
       BuildContext context, ReminderModel reminderModel, int i) async {
     TimeOfDay _time = await showTimePicker(
@@ -151,12 +151,12 @@ class SchedulePage extends StatelessWidget {
     return _time;
   }
 
-  //function for label picker
+  /// Function to change [label] on a [ReminderData] object
   pickLabel(BuildContext context, ReminderModel reminderModel, int i) async {
     showDialog(
         context: context,
         builder: (context) {
-          //show text fields input
+          /// Show text fields input
           return AlertDialog(
             backgroundColor: CustomColors.yellow,
             content: Form(
@@ -186,7 +186,8 @@ class SchedulePage extends StatelessWidget {
                 },
               ),
             ),
-            // Button for cancel or submit label
+
+            /// Button to cancel or submit label
             actions: [
               FlatButton(
                 onPressed: () => Navigator.of(context).pop(),
@@ -200,7 +201,6 @@ class SchedulePage extends StatelessWidget {
                 ),
               ),
               FlatButton(
-                // textColor: CustomColors.maroon,
                 onPressed: () {
                   if (_labelKey.currentState.validate()) {
                     _labelKey.currentState.save();

@@ -16,28 +16,24 @@ void main() {
   ));
 }
 
-// The application
 class Application extends StatefulWidget {
   @override
   _ApplicationState createState() => _ApplicationState();
 }
 
 class _ApplicationState extends State<Application> {
-  // This function will:
-  // a. Initialize all models and the database instance
-  // b. Fetch settings from the local storage to the settings model
-  // c. Fetch list from the local storage to the reminder model
+  /// Initialize app
   void initState() {
-    // set temporary variables
+    /// Set temporary variables for database and provider models
     DatabaseHelper databaseHelper = DatabaseHelper();
     ReminderModel reminderModel = ReminderModel();
     SettingsModel settingsModel = SettingsModel();
 
-    // initialize models
+    /// Initialize models
     reminderModel = Provider.of<ReminderModel>(context, listen: false);
     settingsModel = Provider.of<SettingsModel>(context, listen: false);
 
-    // initialize database and load to the models
+    /// Initialize database then load data to the models
     databaseHelper.initializeDatabase().then((_) {
       settingsModel.fetchSettingsFromStorage();
       reminderModel.fetchListFromStorage();

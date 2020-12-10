@@ -1,35 +1,34 @@
 import 'package:sqflite/sqflite.dart';
 
-// Reminder table
-final String tableReminder = 'reminder';
-final String tableSettings = 'settings';
+/// Reminder table
+const String tableReminder = 'reminder';
+const String tableSettings = 'settings';
 
-// Attributes of reminder table
-final String columnId = 'id';
-final String columnTimeHour = 'hour';
-final String columnTimeMinute = 'minute';
-final String columnLabel = 'label';
-final String columnSwitchON = 'switchON';
-final String columnCardColor = 'cardColor';
+/// Attributes of reminder table
+const String columnId = 'id';
+const String columnTimeHour = 'hour';
+const String columnTimeMinute = 'minute';
+const String columnLabel = 'label';
+const String columnSwitchON = 'switchON';
 
-// Day Selection
-final String columnDayMonday = 'monday';
-final String columnDayTuesday = 'tuesday';
-final String columnDayWednesday = 'wednesday';
-final String columnDayThursday = 'thursday';
-final String columnDayFriday = 'friday';
-final String columnDaySaturday = 'saturday';
-final String columnDaySunday = 'sunday';
+/// Day Selection
+const String columnDayMonday = 'monday';
+const String columnDayTuesday = 'tuesday';
+const String columnDayWednesday = 'wednesday';
+const String columnDayThursday = 'thursday';
+const String columnDayFriday = 'friday';
+const String columnDaySaturday = 'saturday';
+const String columnDaySunday = 'sunday';
 
-// Preferences
-final String columnName = 'name';
+/// Preferences
+const String columnName = 'name';
 
-// Dev NOTE: try to decrease number of columns, or create a new table in the future
+/// Dev NOTE: try to decrease number of columns, or create a new table in the future
 class DatabaseHelper {
-  // The database instance inside of DatabaseHelper
+  /// The database instance inside of DatabaseHelper
   static Database _db;
 
-  // Open database
+  /// Open the database or run [onCreate] function
   Future<void> initializeDatabase() async {
     String path;
 
@@ -37,21 +36,20 @@ class DatabaseHelper {
     try {
       path = await getDatabasesPath() + 'database.db';
     } catch (_) {
-      print('Parent path does not exist');
-      return -1;
+      throw 'Parent path does not exist';
     }
 
     if (_db == null) {
       _db = await openDatabase(path, version: 2,
           onCreate: (Database db, int version) async {
-        // Create the settings table then insert initial values
+        /// Create the settings table then insert initial values
         await db.execute('''
           CREATE TABLE $tableSettings (
             $columnName text NOT NULL
           );''');
         await db.insert(tableSettings, {'$columnName': 'User'});
 
-        // Create the reminder table on first run
+        /// Create the reminder table on first run
         await db.execute('''
           CREATE TABLE $tableReminder (
             $columnId int NOT NULL,
@@ -114,16 +112,16 @@ class DatabaseHelper {
     return rowsDeleted;
   }
 
-  // This function can be used when table is lost or dropped
+  /// Use this function when table is lost or dropped
   Future<void> createTables() async {
-    // Settings table
+    /// Create the settings table
     await _db.execute('''
           CREATE TABLE $tableSettings (
             $columnName text NOT NULL
           );''');
     await _db.insert(tableSettings, {'$columnName': 'User'});
 
-    // Reminders table
+    /// Create the reminders table
     await _db.execute('''
       CREATE TABLE $tableReminder (
         $columnId int NOT NULL,
@@ -141,10 +139,10 @@ class DatabaseHelper {
       );''');
   }
 
-  // This function can be used to clear the database in case of an error
+  /// Use this function to clear the database in case of an error
   Future<void> dropTables() async {
     await _db.execute('''DROP TABLE $tableReminder;''');
-    // await _db.execute('''DROP TABLE $tableSettings;''');
+    await _db.execute('''DROP TABLE $tableSettings;''');
   }
 
   Future close() async => _db.close();

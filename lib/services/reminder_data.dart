@@ -15,8 +15,9 @@ class ReminderData {
     this.label,
     this.switchON,
     this.daySelection,
-  }) : controller = new SlidingCardController();
+  }) : controller = SlidingCardController();
 
+  /// Get text about days (every day/select day) from [daySelection]
   String get getDays {
     String days = '';
     List<String> dayList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -43,6 +44,7 @@ class ReminderData {
     return days;
   }
 
+  /// Get color of [ReminderCard] based on [switchON] value
   Color get cardColor {
     if (switchON)
       return CustomColors.yellow;
@@ -50,33 +52,38 @@ class ReminderData {
       return CustomColors.lightGray;
   }
 
+  /// Set variables on [ReminderData] instance based on map
   void fromMap(Map map) {
-    this.time = TimeOfDay(hour: map['hour'], minute: map['minute']);
-    this.label = map['label'] ?? 'label';
-    this.switchON = (map['switchON'] == 1);
-    // Get daySelection
-    this.daySelection[0] = (map['monday'] == 1);
-    this.daySelection[1] = (map['tuesday'] == 1);
-    this.daySelection[2] = (map['wednesday'] == 1);
-    this.daySelection[3] = (map['thursday'] == 1);
-    this.daySelection[4] = (map['friday'] == 1);
-    this.daySelection[5] = (map['saturday'] == 1);
-    this.daySelection[6] = (map['sunday'] == 1);
+    /// Set variables from map
+    time = TimeOfDay(hour: map['hour'], minute: map['minute']);
+    label = map['label'] ?? 'label';
+    switchON = (map['switchON'] == 1);
+
+    /// Get [daySelection] from map
+    daySelection[0] = (map['monday'] == 1);
+    daySelection[1] = (map['tuesday'] == 1);
+    daySelection[2] = (map['wednesday'] == 1);
+    daySelection[3] = (map['thursday'] == 1);
+    daySelection[4] = (map['friday'] == 1);
+    daySelection[5] = (map['saturday'] == 1);
+    daySelection[6] = (map['sunday'] == 1);
   }
 
+  /// Convert from [ReminderData] instance to a map
   Map<String, dynamic> toMap(int index) => {
         'id': index,
-        'hour': this.time.hour,
-        'minute': this.time.minute,
-        'label': this.label,
-        'switchON': (this.switchON) ? 1 : 0,
-        // Set daySelection
-        'monday': (this.daySelection[0]) ? 1 : 0,
-        'tuesday': (this.daySelection[1]) ? 1 : 0,
-        'wednesday': (this.daySelection[2]) ? 1 : 0,
-        'thursday': (this.daySelection[3]) ? 1 : 0,
-        'friday': (this.daySelection[4]) ? 1 : 0,
-        'saturday': (this.daySelection[5]) ? 1 : 0,
-        'sunday': (this.daySelection[6]) ? 1 : 0,
+        'hour': time.hour,
+        'minute': time.minute,
+        'label': label,
+        'switchON': (switchON) ? 1 : 0,
+
+        /// Set [daySelection] to map value
+        'monday': (daySelection[0]) ? 1 : 0,
+        'tuesday': (daySelection[1]) ? 1 : 0,
+        'wednesday': (daySelection[2]) ? 1 : 0,
+        'thursday': (daySelection[3]) ? 1 : 0,
+        'friday': (daySelection[4]) ? 1 : 0,
+        'saturday': (daySelection[5]) ? 1 : 0,
+        'sunday': (daySelection[6]) ? 1 : 0,
       };
 }
