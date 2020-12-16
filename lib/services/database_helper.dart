@@ -26,7 +26,7 @@ const String columnName = 'name';
 /// Dev NOTE: try to decrease number of columns, or create a new table in the future
 class DatabaseHelper {
   /// The database instance inside of DatabaseHelper
-  static Database _db;
+  static Database _database;
 
   /// Open the database or run [onCreate] function
   Future<void> initializeDatabase() async {
@@ -35,22 +35,23 @@ class DatabaseHelper {
     // Check whether parent path exists
     try {
       path = await getDatabasesPath() + 'database.db';
-    } catch (_) {
-      throw 'Parent path does not exist';
+    } catch (e) {
+      print('Path error: $e');
     }
 
-    if (_db == null) {
-      _db = await openDatabase(path, version: 2,
-          onCreate: (Database db, int version) async {
-        /// Create the settings table then insert initial values
-        await db.execute('''
+    try {
+      if (_database == null) {
+        _database = await openDatabase(path, version: 2,
+            onCreate: (Database db, int version) async {
+          /// Create the settings table then insert initial values
+          await db.execute('''
           CREATE TABLE $tableSettings (
             $columnName text NOT NULL
           );''');
-        await db.insert(tableSettings, {'$columnName': 'User'});
+          await db.insert(tableSettings, {'$columnName': 'User'});
 
-        /// Create the reminder table on first run
-        await db.execute('''
+          /// Create the reminder table on first run
+          await db.execute('''
           CREATE TABLE $tableReminder (
             $columnId int NOT NULL,
             $columnTimeHour int NOT NULL,
@@ -65,64 +66,93 @@ class DatabaseHelper {
             $columnDaySaturday int NOT NULL,
             $columnDaySunday int NOT NULL
           );''');
-      });
+        });
+      }
+    } catch (e) {
+      print('Create table error: e');
     }
   }
 
   Future<List<Map>> readSettings() async {
-    List<Map> maps = await _db.rawQuery('''SELECT * FROM $tableSettings;''');
-    if (maps != null) {
-      if (maps.length > 0) {
-        return maps;
+    try {
+      List<Map> maps =
+          await _database.rawQuery('''SELECT * FROM $tableSettings;''');
+      if (maps != null) {
+        if (maps.length > 0) {
+          return maps;
+        }
       }
+      return null;
+    } catch (e) {
+      print('Fetch error: e');
+      return null;
     }
-    return null;
   }
 
   Future<void> updateSettings(Map map) async {}
 
   Future<void> createReminder(Map map) async {
-    await _db.insert(tableReminder, map);
+    try {
+      await _database.insert(tableReminder, map);
+    } catch (e) {
+      print('Create error: e');
+    }
   }
 
   Future<List<Map>> readReminders() async {
-    List<Map> maps = await _db
-        .rawQuery('''SELECT * FROM $tableReminder ORDER BY $columnId;''');
-    if (maps != null) {
-      if (maps.length > 0) {
-        return maps;
+    try {
+      List<Map> maps = await _database
+          .rawQuery('''SELECT * FROM $tableReminder ORDER BY $columnId;''');
+      if (maps != null) {
+        if (maps.length > 0) {
+          return maps;
+        }
       }
+      return null;
+    } catch (e) {
+      print('Fetch error: e');
+      return null;
     }
-    return null;
   }
 
   Future<int> updateReminder(int id, Map map) async {
-    int rowsUpdated = await _db
-        .update(tableReminder, map, where: '$columnId=?', whereArgs: [id]);
-    return rowsUpdated;
+    try {
+      int rowsUpdated = await _database
+          .update(tableReminder, map, where: '$columnId=?', whereArgs: [id]);
+      return rowsUpdated;
+    } catch (e) {
+      print('Create error: e');
+      return null;
+    }
   }
 
   Future<int> deleteReminder(int id) async {
-    int rowsDeleted =
-        await _db.delete(tableReminder, where: '$columnId=?', whereArgs: [id]);
-    await _db.rawUpdate('''
+    try {
+      int rowsDeleted = await _database
+          .delete(tableReminder, where: '$columnId=?', whereArgs: [id]);
+      await _database.rawUpdate('''
       UPDATE $tableReminder SET $columnId=$columnId-1
       WHERE $columnId>?;
     ''', [id]);
-    return rowsDeleted;
+      return rowsDeleted;
+    } catch (e) {
+      print('Delete error: e');
+      return null;
+    }
   }
 
-  /// Use this function when table is lost or dropped
+  /// Create all the tables when tables are lost or dropped
   Future<void> createTables() async {
-    /// Create the settings table
-    await _db.execute('''
+    try {
+      /// Create the settings table
+      await _database.execute('''
           CREATE TABLE $tableSettings (
             $columnName text NOT NULL
           );''');
-    await _db.insert(tableSettings, {'$columnName': 'User'});
+      await _database.insert(tableSettings, {'$columnName': 'User'});
 
-    /// Create the reminders table
-    await _db.execute('''
+      /// Create the reminders table
+      await _database.execute('''
       CREATE TABLE $tableReminder (
         $columnId int NOT NULL,
         $columnTimeHour int NOT NULL,
@@ -137,13 +167,20 @@ class DatabaseHelper {
         $columnDaySaturday int NOT NULL,
         $columnDaySunday int NOT NULL
       );''');
+    } catch (e) {
+      print('Create error: $e');
+    }
   }
 
-  /// Use this function to clear the database in case of an error
+  /// Drop all the tables
   Future<void> dropTables() async {
-    await _db.execute('''DROP TABLE $tableReminder;''');
-    await _db.execute('''DROP TABLE $tableSettings;''');
+    try {
+      await _database.execute('''DROP TABLE $tableReminder;''');
+      await _database.execute('''DROP TABLE $tableSettings;''');
+    } catch (e) {
+      print('Drop error: $e');
+    }
   }
 
-  Future close() async => _db.close();
+  Future close() async => _database.close();
 }

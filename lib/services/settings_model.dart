@@ -9,7 +9,7 @@ class SettingsModel extends ChangeNotifier {
 
   String get username => _username;
 
-  Future<void> fetchSettingsFromStorage() async {
+  Future<void> fetch() async {
     List<Map> maps = await _databaseHelper.readSettings();
     if (maps != null) {
       _username = maps[0]['name'];
@@ -19,7 +19,7 @@ class SettingsModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  set setUsername(String newName) {
+  set username(String newName) {
     _username = newName;
     notifyListeners();
   }

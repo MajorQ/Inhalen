@@ -59,7 +59,7 @@ class FrontReminderCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     //Days
-                    Text('${reminderObject.getDays}',
+                    Text('${reminderObject.days}',
                         style: TextStyle(
                           fontSize: 16.0,
                           letterSpacing: 0.15,
@@ -98,7 +98,7 @@ class FrontReminderCard extends StatelessWidget {
             left: 294,
             child: Switch(
               activeColor: CustomColors.blue,
-              value: reminderObject.switchON,
+              value: reminderObject.isEnabled,
               onChanged: onSwitchChanged,
             ),
           ),

@@ -32,7 +32,7 @@ class SchedulePage extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(0, 131, 0, 105),
             child: Consumer<ReminderModel>(
               builder: (context, reminderModel, _) {
-                List<ReminderData> reminders = reminderModel.getList;
+                List<ReminderData> reminders = reminderModel.list;
                 return ListView.builder(
                     itemCount: reminders.length,
                     itemBuilder: (context, index) {
@@ -42,12 +42,12 @@ class SchedulePage extends StatelessWidget {
                           onTimePressed: () =>
                               pickTime(context, reminderModel, index),
                           onSwitchChanged: (bool state) =>
-                              reminderModel.changeSwitchOnIndex(state, index),
+                              reminderModel.changeStateAt(state, index),
                           addLabel: () =>
                               pickLabel(context, reminderModel, index),
                           toggleDays: (day) =>
-                              reminderModel.toggleDays(day, index),
-                          delete: () => reminderModel.deleteReminder(index),
+                              reminderModel.toggleDaysAt(day, index),
+                          delete: () => reminderModel.delete(index),
                           onCardTapped: () {
                             if (reminders[index].controller.isCardSeparated ==
                                 true) {
@@ -75,16 +75,16 @@ class SchedulePage extends StatelessWidget {
                 backgroundColor: CustomColors.maroon,
                 foregroundColor: Colors.black,
                 onPressed: () async {
-                  ReminderModel reminderModel =
+                  var reminderModel =
                       Provider.of<ReminderModel>(context, listen: false);
-                  reminderModel.addReminder();
+                  reminderModel.add();
                   int last = reminderModel.length - 1;
                   var currentTime =
                       await pickTime(context, reminderModel, last);
                   if (currentTime != null) {
-                    reminderModel.changeTimeOnIndex(last, currentTime);
+                    reminderModel.changeTimeAt(last, currentTime);
                   } else {
-                    reminderModel.deleteReminder(last);
+                    reminderModel.delete(last);
                   }
                 },
                 child: Icon(
@@ -102,7 +102,7 @@ class SchedulePage extends StatelessWidget {
       BuildContext context, ReminderModel reminderModel, int i) async {
     TimeOfDay _time = await showTimePicker(
         context: context,
-        initialTime: reminderModel.getTimeFromIndex(i),
+        initialTime: reminderModel.getTimeFrom(i),
         cancelText: 'Cancel',
         helpText: 'Select Time',
         builder: (BuildContext context, Widget child) {
@@ -146,7 +146,7 @@ class SchedulePage extends StatelessWidget {
           );
         });
 
-    if (_time != null) reminderModel.changeTimeOnIndex(i, _time);
+    if (_time != null) reminderModel.changeTimeAt(i, _time);
 
     return _time;
   }
@@ -177,7 +177,7 @@ class SchedulePage extends StatelessWidget {
                 maxLength: 8,
                 keyboardType: TextInputType.name,
                 onSaved: (String value) {
-                  reminderModel.changeLabelOnIndex(i, value);
+                  reminderModel.changeLabelAt(i, value);
                 },
                 validator: (String value) {
                   return value.length > 8

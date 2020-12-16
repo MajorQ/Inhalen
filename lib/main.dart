@@ -25,18 +25,14 @@ class _ApplicationState extends State<Application> {
   /// Initialize app
   void initState() {
     /// Set temporary variables for database and provider models
-    DatabaseHelper databaseHelper = DatabaseHelper();
-    ReminderModel reminderModel = ReminderModel();
-    SettingsModel settingsModel = SettingsModel();
-
-    /// Initialize models
-    reminderModel = Provider.of<ReminderModel>(context, listen: false);
-    settingsModel = Provider.of<SettingsModel>(context, listen: false);
+    var databaseHelper = DatabaseHelper();
+    var reminderModel = Provider.of<ReminderModel>(context, listen: false);
+    var settingsModel = Provider.of<SettingsModel>(context, listen: false);
 
     /// Initialize database then load data to the models
     databaseHelper.initializeDatabase().then((_) {
-      settingsModel.fetchSettingsFromStorage();
-      reminderModel.fetchListFromStorage();
+      settingsModel.fetch();
+      reminderModel.fetch();
     });
 
     super.initState();
