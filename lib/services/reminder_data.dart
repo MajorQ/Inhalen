@@ -58,7 +58,7 @@ class ReminderData {
     /// Set variables from map
     time = TimeOfDay(hour: map['hour'], minute: map['minute']);
     label = map['label'] ?? 'label';
-    isEnabled = (map['switchON'] == 1);
+    isEnabled = (map['isEnabled'] == 1);
 
     /// Get [daySelection] from map
     daySelection = [
@@ -81,7 +81,7 @@ class ReminderData {
       'hour': time.hour,
       'minute': time.minute,
       'label': label,
-      'switchON': (isEnabled) ? 1 : 0,
+      'isEnabled': (isEnabled) ? 1 : 0,
 
       /// Set [daySelection] to map value
       'monday': (daySelection[0]) ? 1 : 0,

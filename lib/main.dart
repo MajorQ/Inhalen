@@ -7,30 +7,34 @@ import 'package:inhalen/services/reminder_model.dart';
 import 'package:inhalen/services/settings_model.dart';
 
 void main() {
+  Provider.debugCheckInvalidValueType = null;
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (context) => ReminderModel()),
-      ChangeNotifierProvider(create: (context) => SettingsModel()),
+      Provider(create: (_) => SQFliteHelper()),
+      ProxyProvider<SQFliteHelper, SettingsModel>(
+          update: (_, databaseHelper, __) => SettingsModel(databaseHelper)),
+      ProxyProvider<SQFliteHelper, ReminderModel>(
+          update: (_, databaseHelper, __) => ReminderModel(databaseHelper)),
     ],
-    child: Application(),
+    child: MyApp(),
   ));
 }
 
-class Application extends StatefulWidget {
+class MyApp extends StatefulWidget {
   @override
-  _ApplicationState createState() => _ApplicationState();
+  _MyAppState createState() => _MyAppState();
 }
 
-class _ApplicationState extends State<Application> {
+class _MyAppState extends State<MyApp> {
   /// Initialize app
   void initState() {
     /// Set temporary variables for database and provider models
-    var databaseHelper = DatabaseHelper();
+    var sqfliteHelper = Provider.of<SQFliteHelper>(context, listen: false);
     var reminderModel = Provider.of<ReminderModel>(context, listen: false);
     var settingsModel = Provider.of<SettingsModel>(context, listen: false);
 
     /// Initialize database then load data to the models
-    databaseHelper.initializeDatabase().then((_) {
+    sqfliteHelper.initialize().then((_) {
       settingsModel.fetch();
       reminderModel.fetch();
     });

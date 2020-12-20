@@ -5,8 +5,13 @@ import 'package:inhalen/services/reminder_data.dart';
 
 class ReminderModel extends ChangeNotifier {
   /// List of ReminderData and a DatabaseHelper instance
-  List<ReminderData> _reminders = List();
-  var _localStorage = DatabaseHelper();
+  List<ReminderData> _reminders;
+  SQFliteHelper _databaseHelper;
+
+  ReminderModel(SQFliteHelper sqfliteHelper) {
+    _reminders = List();
+    _databaseHelper = sqfliteHelper;
+  }
 
   /// Returns the list of reminders
   List<ReminderData> get list => _reminders;
@@ -22,14 +27,10 @@ class ReminderModel extends ChangeNotifier {
   /// Read operation returns a list of maps, then the map is converted to [ReminderData]
   /// and added to the [_reminders] list
   Future<void> fetch() async {
-    List<Map> maps = await _localStorage.readReminders();
-    if (maps != null) {
-      for (var map in maps) {
-        var newReminder = ReminderData.fromMap(map);
-        _reminders.add(newReminder);
-      }
-    } else {
-      _reminders = [];
+    List<Map> maps = await _databaseHelper.readReminders();
+    for (var map in maps) {
+      var newReminder = ReminderData.fromMap(map);
+      _reminders.add(newReminder);
     }
     notifyListeners();
   }
@@ -44,7 +45,7 @@ class ReminderModel extends ChangeNotifier {
       daySelection: List.generate(7, (index) => false, growable: false),
     );
     _reminders.add(newReminder);
-    _localStorage.createReminder(newReminder.toMap(_reminders.length - 1));
+    _databaseHelper.createReminder(newReminder.toMap(_reminders.length - 1));
     notifyListeners();
   }
 
@@ -52,7 +53,7 @@ class ReminderModel extends ChangeNotifier {
   /// on the database
   void delete(int index) {
     _reminders.removeAt(index);
-    _localStorage.deleteReminder(index);
+    _databaseHelper.deleteReminder(index);
     notifyListeners();
   }
 
@@ -60,21 +61,21 @@ class ReminderModel extends ChangeNotifier {
   /// then updates the database
   void changeStateAt(bool state, int index) {
     _reminders[index].isEnabled = state;
-    _localStorage.updateReminder(index, _reminders[index].toMap(index));
+    _databaseHelper.updateReminder(index, _reminders[index].toMap(index));
     notifyListeners();
   }
 
   /// Change [daySelection] based on user toggle then updates the database
   void toggleDaysAt(dynamic day, int index) {
     _reminders[index].daySelection[day] = !_reminders[index].daySelection[day];
-    _localStorage.updateReminder(index, _reminders[index].toMap(index));
+    _databaseHelper.updateReminder(index, _reminders[index].toMap(index));
     notifyListeners();
   }
 
   /// Change the [time] for a specific index then updates the database
   void changeTimeAt(int index, TimeOfDay time) {
     _reminders[index].time = time;
-    _localStorage.updateReminder(index, _reminders[index].toMap(index));
+    _databaseHelper.updateReminder(index, _reminders[index].toMap(index));
     notifyListeners();
   }
 
@@ -82,7 +83,7 @@ class ReminderModel extends ChangeNotifier {
   void changeLabelAt(int index, String value) {
     value = (value == '' ? 'Label' : value);
     _reminders[index].label = value;
-    _localStorage.updateReminder(index, _reminders[index].toMap(index));
+    _databaseHelper.updateReminder(index, _reminders[index].toMap(index));
     notifyListeners();
   }
 }
