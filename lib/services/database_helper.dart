@@ -27,7 +27,6 @@ class SQFliteHelper {
           name text
         )
       ''');
-
     await db.execute('''
         CREATE TABLE $reminderTable (
           id INT PRIMARY KEY,
