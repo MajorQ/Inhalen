@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:inhalen/pages/instruction.dart';
 import 'package:inhalen/services/colors.dart';
 
-class Information extends StatelessWidget {
+
+class BackAppbar extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Size get preferredSize => const Size.fromHeight(55);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.yellow,
       appBar: AppBar(
         backgroundColor: CustomColors.yellow,
         elevation: 0,
@@ -24,6 +28,17 @@ class Information extends StatelessWidget {
         ),
         centerTitle: false,
       ),
+    );
+  }
+}
+
+
+class Information extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: CustomColors.yellow,
+      appBar: BackAppbar(),
       body: Container(
         child: Center(
           child: Column(
@@ -100,7 +115,9 @@ class Information extends StatelessWidget {
                                   color: Colors.white,
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => Instruction()));
+                              },
                               color: CustomColors.maroon),
                         ),
                       )
