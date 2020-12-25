@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inhalen/services/colors.dart';
 import 'package:sliding_card/sliding_card.dart';
 
+// Reminder card data
 class ReminderData {
   TimeOfDay time;
   String label;
@@ -16,6 +17,7 @@ class ReminderData {
     this.daySelection,
   }) : controller = new SlidingCardController();
 
+  // Getter for the list of days reminder selection
   String get getDays {
     String days = '';
     List<String> dayList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -42,6 +44,7 @@ class ReminderData {
     return days;
   }
 
+  // Getter for card color depends on reminder card switch
   Color get cardColor {
     if (switchON)
       return CustomColors.yellow;

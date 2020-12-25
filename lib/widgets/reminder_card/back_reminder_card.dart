@@ -25,7 +25,7 @@ class BackReminderCard extends StatelessWidget {
       child: Stack(
         alignment: AlignmentDirectional.bottomCenter,
         children: <Widget>[
-          // Widget for reminder days
+          // Reminder days selection toggle buttons
           Positioned(
             top: 10,
             child: ToggleButtons(
@@ -44,7 +44,6 @@ class BackReminderCard extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 20.0,
               ),
-              // borderRadius: BorderRadius.all(radius:),
               constraints: BoxConstraints(
                 maxWidth: 48.0,
                 maxHeight: 60.0,
@@ -61,7 +60,7 @@ class BackReminderCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              // Widget for changing reminder label
+              // Button for changing the reminder card label
               FlatButton.icon(
                 onPressed: addLabel,
                 label: Text(
@@ -73,7 +72,7 @@ class BackReminderCard extends StatelessWidget {
                 ),
                 icon: Icon(Icons.label, color: CustomColors.black),
               ),
-              // Widget for deleting reminder card
+              // Button to delete a reminder card
               FlatButton.icon(
                 onPressed: delete,
                 label: Text(

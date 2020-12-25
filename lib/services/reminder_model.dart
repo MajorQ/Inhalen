@@ -4,7 +4,7 @@ import 'package:inhalen/services/database_helper.dart';
 
 class ReminderModel extends ChangeNotifier {
   // List of ReminderData and a DatabaseHelper instance
-  static List<ReminderData> _reminders = new List();
+  List<ReminderData> _reminders = new List();
   DatabaseHelper _localStorage = new DatabaseHelper();
 
   // Getter function that returns the list of reminders
