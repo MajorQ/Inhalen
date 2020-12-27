@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:inhalen/pages/home.dart';
 import 'package:inhalen/pages/schedule.dart';
+import 'package:inhalen/pages/settings.dart';
 import 'package:inhalen/services/colors.dart';
 
 class Screen extends StatefulWidget {
@@ -25,8 +26,10 @@ class _ScreenState extends State<Screen> {
         return HomePage();
       case 1:
         return SchedulePage();
+      case 3:
+        return SettingsPage();
     }
-    return HomePage();
+    return SchedulePage();
   }
 
   @override
@@ -34,7 +37,9 @@ class _ScreenState extends State<Screen> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
-      body: _getScaffoldBody(context),
+      body: Padding(
+          padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 0),
+          child: _getScaffoldBody(context)),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(

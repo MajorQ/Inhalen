@@ -12,95 +12,95 @@ class SchedulePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.white,
-        child: Stack(alignment: Alignment.topCenter, children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 55.0, 0, 0),
-            child: Text(
-                'Tambahkan reminder agar Anda\ntidak lupa menggunakan obat!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20.0,
-                  letterSpacing: 0.15,
-                  fontFamily: 'Raleway',
-                  fontStyle: FontStyle.normal,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black,
-                )),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 131, 0, 105),
-            child: Consumer<ReminderModel>(
-              builder: (context, reminderModel, _) {
-                List<ReminderData> reminders = reminderModel.list;
-                return ListView.builder(
-                    itemCount: reminders.length,
-                    itemBuilder: (context, index) {
-                      return ReminderCard(
-                          key: ObjectKey(reminders[index]),
-                          reminderObject: reminders[index],
-                          onTimePressed: () =>
-                              pickTime(context, reminderModel, index),
-                          onSwitchChanged: (bool state) =>
-                              reminderModel.changeStateAt(state, index),
-                          addLabel: () =>
-                              pickLabel(context, reminderModel, index),
-                          toggleDays: (day) =>
-                              reminderModel.toggleDaysAt(day, index),
-                          delete: () => reminderModel.delete(index),
-                          onCardTapped: () {
-                            if (reminders[index].controller.isCardSeparated ==
-                                true) {
-                              reminders[index].controller.collapseCard();
-                            } else {
-                              reminders[index].controller.expandCard();
-                              for (int i = 0; i < reminders.length; ++i) {
-                                if (i == index) {
-                                  continue;
-                                } else {
-                                  reminders[i].controller.collapseCard();
-                                }
+      color: Colors.white,
+      child: Stack(alignment: Alignment.topCenter, children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 55.0, 0, 0),
+          child:
+              Text('Tambahkan reminder agar Anda\ntidak lupa menggunakan obat!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    letterSpacing: 0.15,
+                    fontFamily: 'Raleway',
+                    fontStyle: FontStyle.normal,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black,
+                  )),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 130, 0, 0),
+          child: Consumer<ReminderModel>(
+            builder: (context, reminderModel, _) {
+              List<ReminderData> reminders = reminderModel.list;
+              return ListView.builder(
+                  itemCount: reminders.length,
+                  itemBuilder: (context, index) {
+                    return ReminderCard(
+                        key: ObjectKey(reminders[index]),
+                        reminderObject: reminders[index],
+                        onTimePressed: () =>
+                            pickTime(context, reminderModel, index),
+                        onSwitchChanged: (bool state) =>
+                            reminderModel.changeStateAt(state, index),
+                        addLabel: () =>
+                            pickLabel(context, reminderModel, index),
+                        toggleDays: (day) =>
+                            reminderModel.toggleDaysAt(day, index),
+                        delete: () => reminderModel.delete(index),
+                        onCardTapped: () {
+                          if (reminders[index].controller.isCardSeparated ==
+                              true) {
+                            reminders[index].controller.collapseCard();
+                          } else {
+                            reminders[index].controller.expandCard();
+                            for (int i = 0; i < reminders.length; ++i) {
+                              if (i == index) {
+                                continue;
+                              } else {
+                                reminders[i].controller.collapseCard();
                               }
                             }
-                          });
-                    });
-              },
-            ),
+                          }
+                        });
+                  });
+            },
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: FloatingActionButton(
-                backgroundColor: CustomColors.maroon,
-                foregroundColor: Colors.black,
-                onPressed: () async {
-                  var reminderModel =
-                      Provider.of<ReminderModel>(context, listen: false);
-                  reminderModel.add();
-                  int last = reminderModel.length - 1;
-                  var currentTime =
-                      await pickTime(context, reminderModel, last);
-                  if (currentTime != null) {
-                    reminderModel.changeTimeAt(last, currentTime);
-                  } else {
-                    reminderModel.delete(last);
-                  }
-                },
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: FloatingActionButton(
+              backgroundColor: CustomColors.maroon,
+              foregroundColor: Colors.black,
+              onPressed: () async {
+                var reminderModel =
+                    Provider.of<ReminderModel>(context, listen: false);
+                reminderModel.add();
+                int last = reminderModel.length - 1;
+                var currentTime = await pickTime(context, reminderModel, last);
+                if (currentTime != null) {
+                  reminderModel.changeTimeAt(last, currentTime);
+                } else {
+                  reminderModel.delete(last);
+                }
+              },
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
               ),
             ),
-          )
-        ]));
+          ),
+        )
+      ]),
+    );
   }
 
   /// Function to show time picker and change [time] on a [ReminderData] object
   Future<TimeOfDay> pickTime(
       BuildContext context, ReminderModel reminderModel, int i) async {
-    TimeOfDay _time = await showTimePicker(
+    TimeOfDay time = await showTimePicker(
         context: context,
         initialTime: reminderModel.getTimeFrom(i),
         cancelText: 'Cancel',
@@ -146,9 +146,9 @@ class SchedulePage extends StatelessWidget {
           );
         });
 
-    if (_time != null) reminderModel.changeTimeAt(i, _time);
+    if (time != null) reminderModel.changeTimeAt(i, time);
 
-    return _time;
+    return time;
   }
 
   /// Function to change [label] on a [ReminderData] object
@@ -171,9 +171,9 @@ class SchedulePage extends StatelessWidget {
                       fontStyle: FontStyle.normal,
                     ),
                     errorStyle: TextStyle(
-                      fontFamily: 'Raleway',
-                      fontStyle: FontStyle.normal,
-                    )),
+                        fontFamily: 'Raleway',
+                        fontStyle: FontStyle.normal,
+                        fontSize: 14.0)),
                 maxLength: 8,
                 keyboardType: TextInputType.name,
                 onSaved: (String value) {

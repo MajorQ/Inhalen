@@ -53,9 +53,7 @@ class ReminderData {
   }
 
   /// Set variables on [ReminderData] instance based on map
-
   ReminderData.fromMap(Map map) {
-    /// Set variables from map
     time = TimeOfDay(hour: map['hour'], minute: map['minute']);
     label = map['label'] ?? 'label';
     isEnabled = (map['isEnabled'] == 1);

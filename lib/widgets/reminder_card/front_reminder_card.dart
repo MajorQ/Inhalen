@@ -22,7 +22,7 @@ class FrontReminderCard extends StatelessWidget {
     return Card(
       color: reminderObject.cardColor,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(const Radius.circular(10))),
+          borderRadius: BorderRadius.all(const Radius.circular(5))),
       child: Stack(
         alignment: AlignmentDirectional.centerStart,
         children: <Widget>[
@@ -95,7 +95,7 @@ class FrontReminderCard extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 294,
+            left: 280,
             child: Switch(
               activeColor: CustomColors.blue,
               value: reminderObject.isEnabled,

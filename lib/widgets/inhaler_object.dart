@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:inhalen/services/colors.dart';
 import 'package:inhalen/pages/information.dart';
 
-class InhalerObject extends StatelessWidget {
+class InhalerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.symmetric(vertical: 2.0),
+        height: 320,
+        margin: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
             color: CustomColors.yellow,
             borderRadius: BorderRadius.circular(10),

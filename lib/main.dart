@@ -7,14 +7,17 @@ import 'package:inhalen/services/reminder_model.dart';
 import 'package:inhalen/services/settings_model.dart';
 
 void main() {
-  Provider.debugCheckInvalidValueType = null;
   runApp(MultiProvider(
     providers: [
-      Provider(create: (_) => SQFliteHelper()),
-      ProxyProvider<SQFliteHelper, SettingsModel>(
-          update: (_, databaseHelper, __) => SettingsModel(databaseHelper)),
-      ProxyProvider<SQFliteHelper, ReminderModel>(
-          update: (_, databaseHelper, __) => ReminderModel(databaseHelper)),
+      Provider(create: (context) => SQFliteHelper()),
+      ChangeNotifierProxyProvider<SQFliteHelper, SettingsModel>(
+          create: (context) => SettingsModel(),
+          update: (context, sqfliteHelper, settingModel) =>
+              settingModel..sqfliteHelper = sqfliteHelper),
+      ChangeNotifierProxyProvider<SQFliteHelper, ReminderModel>(
+          create: (context) => ReminderModel(),
+          update: (context, sqfliteHelper, reminderModel) =>
+              reminderModel..sqfliteHelper = sqfliteHelper),
     ],
     child: MyApp(),
   ));

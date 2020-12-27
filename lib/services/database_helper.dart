@@ -13,22 +13,21 @@ class SQFliteHelper {
   Future<void> initialize() async {
     try {
       _database = await openDatabase(db_name,
-          version: 2, onCreate: _onCreate, onUpgrade: _onUpdate);
+          version: 4, onCreate: _onCreate, onUpgrade: _onUpgrade);
     } catch (e) {
       print('Open Database error -> $e');
     }
   }
 
+  /// Creates the [settingsTable] and [reminderTable]. then insert intital values
+  /// for [settingsTable]
   _onCreate(Database db, int version) async {
-    /// Create the settings table then insert initial values
     await db.execute('''
         CREATE TABLE $settingsTable (
           name text
         )
       ''');
-    await db.insert(settingsTable, {'name': 'User'});
 
-    /// Create the reminder table on first run
     await db.execute('''
         CREATE TABLE $reminderTable (
           id INT PRIMARY KEY,
@@ -45,12 +44,16 @@ class SQFliteHelper {
           sunday INT
         )
       ''');
+
+    await db.insert(settingsTable, {'name': 'User'});
   }
 
-  _onUpdate(Database db, int oldVersion, int newVersion) async {
-    await _database.execute('''DROP TABLE $reminderTable;''');
-    await _database.execute('''DROP TABLE $settingsTable;''');
-    _onCreate(db, newVersion);
+  /// Drops databases then re-runs the [_onCreate] function
+  _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    await db.execute('''DROP TABLE $reminderTable;''');
+    await db.execute('''DROP TABLE $settingsTable;''');
+    await _onCreate(db, newVersion);
+    print('Database upgraded to version $newVersion');
   }
 
   Future<List<Map>> readSettings() async {
@@ -93,16 +96,12 @@ class SQFliteHelper {
       .update(reminderTable, map, where: 'id=?', whereArgs: [id]);
 
   Future<int> deleteReminder(int id) async {
-    try {
-      int rowsDeleted =
-          await _database.delete(reminderTable, where: 'id=?', whereArgs: [id]);
+    int rowsDeleted =
+        await _database.delete(reminderTable, where: 'id=?', whereArgs: [id]);
 
-      await _database
-          .rawUpdate('UPDATE $reminderTable SET id=id-1 WHERE id>?', [id]);
+    await _database
+        .rawUpdate('UPDATE $reminderTable SET id=id-1 WHERE id>?', [id]);
 
-      return rowsDeleted;
-    } catch (e) {
-      throw e;
-    }
+    return rowsDeleted;
   }
 }
