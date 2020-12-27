@@ -4,7 +4,7 @@ import 'package:inhalen/services/colors.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class Instruction extends StatelessWidget {
-  YoutubePlayerController _controller = YoutubePlayerController(
+  final YoutubePlayerController _controller = YoutubePlayerController(
     initialVideoId: 'sWQy4zv1ZeU',
     params: YoutubePlayerParams(
       showControls: true,
