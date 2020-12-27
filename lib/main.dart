@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:inhalen/screen.dart';
+import 'package:inhalen/services/notification_plugin.dart';
 import 'package:inhalen/services/reminder_model.dart';
 import 'package:inhalen/services/settings_model.dart';
 import 'package:inhalen/services/database_helper.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  notificationPlugin.configureLocalTimeZone();
+  notificationPlugin.initializeNotificationPlugin();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => ReminderModel()),
@@ -13,7 +17,10 @@ void main() {
     ],
     child: Application(),
   ));
+  
 }
+
+
 
 // The application
 class Application extends StatefulWidget {
@@ -31,6 +38,7 @@ class _ApplicationState extends State<Application> {
     DatabaseHelper _databaseHelper = new DatabaseHelper();
     ReminderModel _reminderModel = new ReminderModel();
     SettingsModel _settingsModel = new SettingsModel();
+    // NotificationPlugin notificationPlugin = NotificationPlugin();
 
     // initialize models
     _reminderModel = Provider.of<ReminderModel>(context, listen: false);
@@ -42,6 +50,7 @@ class _ApplicationState extends State<Application> {
       _reminderModel.fetchListFromStorage();
     });
 
+    
     super.initState();
   }
 
@@ -54,4 +63,7 @@ class _ApplicationState extends State<Application> {
         ),
         home: Screen());
   }
+
 }
+
+
