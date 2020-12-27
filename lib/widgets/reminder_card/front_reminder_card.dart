@@ -8,11 +8,13 @@ class FrontReminderCard extends StatelessWidget {
   final ReminderData reminderObject;
 
   const FrontReminderCard(
-    {Key key,
-    @required this.onSwitchChanged,
-    @required this.onTimePressed,
-    @required this.reminderObject})
-    : super(key: key);
+      {Key key,
+      @required this.onSwitchChanged,
+      @required this.onTimePressed,
+      @required this.reminderObject})
+      : super(key: key);
+
+  // bool switchON = true;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,6 @@ class FrontReminderCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // Button for changing and showing reminder time
                 ButtonTheme(
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -54,11 +55,10 @@ class FrontReminderCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 5.0),
-                // Reminder card information
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    // Days selection
+                    //Days
                     Text('${reminderObject.getDays}',
                         style: TextStyle(
                           fontSize: 16.0,
@@ -68,7 +68,7 @@ class FrontReminderCard extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                           color: CustomColors.black,
                         )),
-                    // Separator
+                    //separator
                     Text(
                       reminderObject.label == 'Label' ? '' : ' \u2022 ',
                       style: TextStyle(
@@ -77,7 +77,6 @@ class FrontReminderCard extends StatelessWidget {
                         color: CustomColors.black,
                       ),
                     ),
-                    // Reminder label
                     Text(
                         reminderObject.label == 'Label'
                             ? ''

@@ -4,7 +4,6 @@ import 'front_reminder_card.dart';
 import 'back_reminder_card.dart';
 import 'package:sliding_card/sliding_card.dart';
 
-// Sliding card configuration for the reminders
 class ReminderCard extends StatelessWidget {
   final Function onCardTapped;
   final Function addLabel;

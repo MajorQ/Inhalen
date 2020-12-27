@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:inhalen/services/notification_plugin.dart';
 import 'package:provider/provider.dart';
 import 'package:inhalen/screen.dart';
 import 'package:inhalen/services/reminder_model.dart';
@@ -27,25 +26,21 @@ class _ApplicationState extends State<Application> {
   // a. Initialize all models and the database instance
   // b. Fetch settings from the local storage to the settings model
   // c. Fetch list from the local storage to the reminder model
-  //d. Initialize notification platform spesifics
   void initState() {
     // set temporary variables
-    DatabaseHelper databaseHelper = new DatabaseHelper();
-    ReminderModel reminderModel = new ReminderModel();
-    SettingsModel settingsModel = new SettingsModel();
-    
+    DatabaseHelper _databaseHelper = new DatabaseHelper();
+    ReminderModel _reminderModel = new ReminderModel();
+    SettingsModel _settingsModel = new SettingsModel();
+
     // initialize models
-    reminderModel = Provider.of<ReminderModel>(context, listen: false);
-    settingsModel = Provider.of<SettingsModel>(context, listen: false);
+    _reminderModel = Provider.of<ReminderModel>(context, listen: false);
+    _settingsModel = Provider.of<SettingsModel>(context, listen: false);
 
     // initialize database and load to the models
-    databaseHelper.initializeDatabase().then((_) {
-      settingsModel.fetchSettingsFromStorage();
-      reminderModel.fetchListFromStorage();
+    _databaseHelper.initializeDatabase().then((_) {
+      _settingsModel.fetchSettingsFromStorage();
+      _reminderModel.fetchListFromStorage();
     });
-
-    notificationPlugin.initializeNotificationPlugin().then((value){});
-    notificationPlugin.setOnNotificationClick(onNotificationClick);
 
     super.initState();
   }
@@ -59,7 +54,4 @@ class _ApplicationState extends State<Application> {
         ),
         home: Screen());
   }
-
-  // Function for notification payload
-  void onNotificationClick(String payload) {}
 }
