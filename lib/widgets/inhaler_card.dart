@@ -3,6 +3,10 @@ import 'package:inhalen/services/colors.dart';
 import 'package:inhalen/pages/information.dart';
 
 class InhalerCard extends StatelessWidget {
+  final Map inhalerInfo;
+
+  InhalerCard({Key key, @required this.inhalerInfo}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,13 +20,17 @@ class InhalerCard extends StatelessWidget {
                 color: Colors.black.withOpacity(0.25),
                 spreadRadius: 0,
                 blurRadius: 4,
-                offset: Offset(0, 2),
+                // offset: Offset(0, 2),
               )
             ]),
         child: InkWell(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Information()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Information(
+                          inhalerInfo: inhalerInfo,
+                        )));
           },
           child: Stack(
             children: <Widget>[
@@ -33,7 +41,7 @@ class InhalerCard extends StatelessWidget {
                   height: 240.0,
                   width: 240.0,
                   child: Image.asset(
-                    'assets/images/respiclick.png',
+                    'assets/images/${inhalerInfo['name']}.png',
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -46,8 +54,12 @@ class InhalerCard extends StatelessWidget {
                   color: Colors.white,
                   alignment: Alignment.center,
                   child: Text(
-                    'Nama Inhaler',
-                    style: TextStyle(fontSize: 20, fontFamily: "Raleway"),
+                    inhalerInfo['name'],
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: "Raleway",
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.5),
                   ),
                 ),
               )
