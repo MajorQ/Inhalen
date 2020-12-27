@@ -26,20 +26,23 @@ class InhalerCard extends StatelessWidget {
           },
           child: Stack(
             children: <Widget>[
-              Container(
-                height: 150,
-                width: 150,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/respiclick.png'),
+              Positioned(
+                left: 24.0,
+                bottom: 64.0,
+                child: Container(
+                  height: 240.0,
+                  width: 240.0,
+                  child: Image.asset(
+                    'assets/images/respiclick.png',
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
               Positioned(
                 bottom: 0,
                 child: Container(
-                  width: 160,
-                  height: 48,
+                  width: 320.0,
+                  height: 48.0,
                   color: Colors.white,
                   alignment: Alignment.center,
                   child: Text(
