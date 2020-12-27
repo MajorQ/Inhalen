@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:inhalen/pages/information.dart';
 import 'package:inhalen/services/colors.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class Instruction extends StatelessWidget {
   YoutubePlayerController _controller = YoutubePlayerController(
-      initialVideoId: 'BE9ATY2Ygas',
-      flags: YoutubePlayerFlags(autoPlay: true, mute: true));
+    initialVideoId: 'sWQy4zv1ZeU',
+    params: YoutubePlayerParams(
+      showControls: true,
+      showFullscreenButton: true,
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,10 +22,11 @@ class Instruction extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("Yuk, belajar dari video ini!"),
-            YoutubePlayer(
+            Container(
+                child: YoutubePlayerIFrame(
               controller: _controller,
-              showVideoProgressIndicator: true,
-            )
+              aspectRatio: 16 / 9,
+            )),
           ],
         ),
       ),
