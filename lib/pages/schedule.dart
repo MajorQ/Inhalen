@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:inhalen/services/colors.dart';
 import 'package:inhalen/services/reminder_data.dart';
 import 'package:inhalen/services/reminder_model.dart';
+import 'package:inhalen/services/notification_plugin.dart';
 import 'package:inhalen/widgets/reminder_card/reminder_card.dart';
 
 class SchedulePage extends StatelessWidget {
@@ -11,60 +12,71 @@ class SchedulePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // NotificationPlugin notificationPlugin = NotificationPlugin();
     return Container(
-      color: Colors.white,
-      child: Stack(alignment: Alignment.topCenter, children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 55.0, 0, 0),
-          child:
-              Text('Tambahkan reminder agar Anda\ntidak lupa menggunakan obat!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    letterSpacing: 0.15,
-                    fontFamily: 'Raleway',
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
-                  )),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 130, 0, 0),
-          child: Consumer<ReminderModel>(
-            builder: (context, reminderModel, _) {
-              List<ReminderData> reminders = reminderModel.list;
-              return ListView.builder(
-                  itemCount: reminders.length,
-                  itemBuilder: (context, index) {
-                    return ReminderCard(
-                        key: ObjectKey(reminders[index]),
-                        reminderObject: reminders[index],
-                        onTimePressed: () =>
-                            pickTime(context, reminderModel, index),
-                        onSwitchChanged: (bool state) =>
-                            reminderModel.changeStateAt(state, index),
-                        addLabel: () =>
-                            pickLabel(context, reminderModel, index),
-                        toggleDays: (day) =>
-                            reminderModel.toggleDaysAt(day, index),
-                        delete: () => reminderModel.delete(index),
-                        onCardTapped: () {
-                          if (reminders[index].controller.isCardSeparated ==
-                              true) {
-                            reminders[index].controller.collapseCard();
-                          } else {
-                            reminders[index].controller.expandCard();
-                            for (int i = 0; i < reminders.length; ++i) {
-                              if (i == index) {
-                                continue;
+        color: Colors.white,
+        child: Stack(alignment: Alignment.topCenter, children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 55.0, 0, 0),
+            child: Text(
+                'Tambahkan reminder agar Anda\ntidak lupa menggunakan obat!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 0.15,
+                  fontFamily: 'Raleway',
+                  fontStyle: FontStyle.normal,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black,
+                )),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 131, 0, 105),
+            child: Consumer<ReminderModel>(
+              builder: (context, reminderModel, _) {
+                List<ReminderData> reminders = reminderModel.getList;
+                return ListView.builder(
+                    itemCount: reminders.length,
+                    itemBuilder: (context, index) {
+                      return Center(
+                        child: ReminderCard(
+                            key: ObjectKey(reminders[index]),
+                            reminderObject: reminders[index],
+                            onTimePressed: () async {
+                              await pickTime(context, reminderModel, index);
+                              await notificationPlugin.scheduleNotification();
+                              print(await notificationPlugin.getPendingNotificationCount());
+                            },
+                            onSwitchChanged: (bool state) =>
+                                reminderModel.changeSwitchOnIndex(state, index),
+                            addLabel: () =>
+                                pickLabel(context, reminderModel, index),
+                            toggleDays: (day) =>
+                                reminderModel.toggleDays(day, index),
+                            delete: () async {
+                              notificationPlugin.cancelNotification();
+                              print(await notificationPlugin.getPendingNotificationCount());
+                              reminderModel.deleteReminder(index);
+                            },
+                            onCardTapped: () {
+                              if (reminders[index].controller.isCardSeparated ==
+                                  true) {
+                                reminders[index].controller.collapseCard();
                               } else {
-                                reminders[i].controller.collapseCard();
+                                reminders[index].controller.expandCard();
+                                for (int i = 0; i < reminders.length; ++i) {
+                                  if (i == index) {
+                                    continue;
+                                  } else {
+                                    reminders[i].controller.collapseCard();
+                                  }
+                                }
                               }
-                            }
-                          }
-                        });
-                  });
-            },
+                            }),
+                      );
+                    });
+              },
+            ),
           ),
         ),
         Align(
@@ -220,4 +232,5 @@ class SchedulePage extends StatelessWidget {
           );
         });
   }
+
 }
