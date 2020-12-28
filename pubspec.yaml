@@ -23,20 +23,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-  introduction_screen: ^1.0.7
->>>>>>> cc0b2662af700d1f3d820827096ccc2f7678a6d3
   youtube_player_iframe: ^1.2.0+2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-<<<<<<< HEAD
-=======
->>>>>>> 3a1ab18bb68de3210760c11e78ec6d74f68316c9
->>>>>>> cc0b2662af700d1f3d820827096ccc2f7678a6d3
+
   cupertino_icons: ^0.1.3
   flutter_local_notifications: ^3.0.2
   introduction_screen: ^1.0.7
