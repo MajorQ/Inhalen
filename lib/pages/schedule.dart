@@ -34,7 +34,7 @@ class SchedulePage extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(0, 131, 0, 105),
             child: Consumer<ReminderModel>(
               builder: (context, reminderModel, _) {
-                List<ReminderData> reminders = reminderModel.getList;
+                List<ReminderData> reminders = reminderModel.list;
                 return ListView.builder(
                     itemCount: reminders.length,
                     itemBuilder: (context, index) {
@@ -48,15 +48,15 @@ class SchedulePage extends StatelessWidget {
                               print(await notificationPlugin.getPendingNotificationCount());
                             },
                             onSwitchChanged: (bool state) =>
-                                reminderModel.changeSwitchOnIndex(state, index),
+                                reminderModel.changeStateAt(state, index),
                             addLabel: () =>
                                 pickLabel(context, reminderModel, index),
                             toggleDays: (day) =>
-                                reminderModel.toggleDays(day, index),
+                                reminderModel.toggleDaysAt(day, index),
                             delete: () async {
                               notificationPlugin.cancelNotification();
                               print(await notificationPlugin.getPendingNotificationCount());
-                              reminderModel.deleteReminder(index);
+                              reminderModel.delete(index);
                             },
                             onCardTapped: () {
                               if (reminders[index].controller.isCardSeparated ==
@@ -78,7 +78,6 @@ class SchedulePage extends StatelessWidget {
               },
             ),
           ),
-        ),
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
