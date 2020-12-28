@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:inhalen/services/colors.dart';
+
 import 'package:inhalen/pages/home.dart';
 import 'package:inhalen/pages/schedule.dart';
+import 'package:inhalen/pages/settings.dart';
+import 'package:inhalen/pages/about.dart';
+import 'package:inhalen/services/colors.dart';
 
-// The four main pages
 class Screen extends StatefulWidget {
   @override
   _ScreenState createState() => _ScreenState();
 }
 
 class _ScreenState extends State<Screen> {
-  // Change the index of bottom navigation bar based on touch
+  /// Change the index of bottom navigation bar based on touch
   int _currentIndex = 0;
   void _changeIndex(index) {
     setState(() {
@@ -18,15 +20,19 @@ class _ScreenState extends State<Screen> {
     });
   }
 
-  // Function to get current page based on index
+  /// Get current page based on index
   Widget _getScaffoldBody(BuildContext context) {
     switch (_currentIndex) {
       case 0:
         return HomePage();
       case 1:
         return SchedulePage();
+      case 2:
+        return AboutUsPage();
+      case 3:
+        return SettingsPage();
     }
-    return HomePage();
+    return SchedulePage();
   }
 
   @override
@@ -34,7 +40,9 @@ class _ScreenState extends State<Screen> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
-      body: _getScaffoldBody(context),
+      body: Padding(
+          padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 0),
+          child: _getScaffoldBody(context)),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
@@ -72,8 +80,8 @@ class _ScreenState extends State<Screen> {
                 label: 'Rutinitas',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.help),
-                label: 'Bantuan',
+                icon: Icon(Icons.info),
+                label: 'About Us',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.settings),

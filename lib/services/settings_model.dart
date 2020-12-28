@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
+
 import 'package:inhalen/services/database_helper.dart';
 
 class SettingsModel extends ChangeNotifier {
-  DatabaseHelper _databaseHelper = new DatabaseHelper();
-
+  SQFliteHelper sqfliteHelper;
   String _username;
 
   String get username => _username;
 
-  Future<void> fetchSettingsFromStorage() async {
-    List<Map> maps = await _databaseHelper.readSettings();
-    if (maps != null) {
-      _username = maps[0]['name'];
-    } else {
-      _username = 'User';
-    }
+  set username(String newName) {
+    _username = newName;
+    Map<String, dynamic> map = {'name': '$newName'};
+    sqfliteHelper.updateSettings(map);
     notifyListeners();
   }
 
-  set setUsername(String newName) {
-    _username = newName;
+  Future<void> fetch() async {
+    List<Map> maps = await sqfliteHelper.readSettings();
+    _username = maps[0]['name'];
     notifyListeners();
   }
 }

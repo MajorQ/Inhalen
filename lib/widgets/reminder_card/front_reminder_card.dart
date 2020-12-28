@@ -22,7 +22,7 @@ class FrontReminderCard extends StatelessWidget {
     return Card(
       color: reminderObject.cardColor,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(const Radius.circular(10))),
+          borderRadius: BorderRadius.all(const Radius.circular(5))),
       child: Stack(
         alignment: AlignmentDirectional.centerStart,
         children: <Widget>[
@@ -59,7 +59,7 @@ class FrontReminderCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     //Days
-                    Text('${reminderObject.getDays}',
+                    Text('${reminderObject.days}',
                         style: TextStyle(
                           fontSize: 16.0,
                           letterSpacing: 0.15,
@@ -95,10 +95,10 @@ class FrontReminderCard extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 294,
+            left: 280,
             child: Switch(
               activeColor: CustomColors.blue,
-              value: reminderObject.switchON,
+              value: reminderObject.isEnabled,
               onChanged: onSwitchChanged,
             ),
           ),
