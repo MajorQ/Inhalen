@@ -38,8 +38,10 @@ class BackAppbar extends StatelessWidget implements PreferredSizeWidget {
 
 class Information extends StatelessWidget {
   final Map inhalerInfo;
+  final int index;
 
-  Information({Key key, @required this.inhalerInfo}) : super(key: key);
+  Information({Key key, @required this.inhalerInfo, @required this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,40 +49,43 @@ class Information extends StatelessWidget {
       backgroundColor: CustomColors.yellow,
       appBar: BackAppbar(),
       body: Container(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                height: 300,
-                width: 200,
-                margin: EdgeInsets.only(bottom: 20),
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage(
-                            'assets/images/${inhalerInfo['name']}.png'),
-                        fit: BoxFit.contain)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Hero(
+              tag: 'yellow_container$index',
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  height: 300,
+                  width: 200,
+                  margin: EdgeInsets.only(bottom: 20),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(
+                              'assets/images/${inhalerInfo['name']}.png'),
+                          fit: BoxFit.contain)),
+                ),
               ),
-              Container(
-                height: 305,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(25)),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 7,
-                        offset: Offset(0, 1),
-                      )
-                    ]),
-                child: BottomCard(inhalerInfo: inhalerInfo),
-              )
-            ],
-          ),
+            ),
+            Container(
+              height: 305,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 3,
+                      blurRadius: 7,
+                      offset: Offset(0, 1),
+                    )
+                  ]),
+              child: BottomCard(inhalerInfo: inhalerInfo),
+            )
+          ],
         ),
       ),
     );

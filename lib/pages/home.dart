@@ -71,18 +71,23 @@ class _HomePageState extends State<HomePage> {
                 children: (inhalerJSON != null)
                     ? [
                         InhalerCard(
+                          index: 0,
                           inhalerInfo: inhalerJSON[0],
                         ),
                         InhalerCard(
+                          index: 1,
                           inhalerInfo: inhalerJSON[1],
                         ),
                         InhalerCard(
+                          index: 2,
                           inhalerInfo: inhalerJSON[2],
                         ),
                         InhalerCard(
+                          index: 3,
                           inhalerInfo: inhalerJSON[3],
                         ),
                         InhalerCard(
+                          index: 4,
                           inhalerInfo: inhalerJSON[4],
                         ),
                       ]

@@ -7,9 +7,8 @@ class SettingsPage extends StatelessWidget {
   final GlobalKey<FormState> _labelKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    var settingsModel = Provider.of<SettingsModel>(context, listen: false);
     return Consumer<SettingsModel>(
-      builder: (context, value, child) {
+      builder: (context, settingsModel, child) {
         return Container(
           width: double.infinity,
           child: Column(
@@ -32,7 +31,7 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  _pickLabel(BuildContext context, SettingsModel model) async {
+  void _pickLabel(BuildContext context, SettingsModel model) async {
     showDialog(
         context: context,
         builder: (context) {

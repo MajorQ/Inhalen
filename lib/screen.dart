@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:inhalen/pages/home.dart';
 import 'package:inhalen/pages/schedule.dart';
 import 'package:inhalen/pages/settings.dart';
+import 'package:inhalen/pages/about.dart';
 import 'package:inhalen/services/colors.dart';
 
 class Screen extends StatefulWidget {
@@ -26,6 +27,8 @@ class _ScreenState extends State<Screen> {
         return HomePage();
       case 1:
         return SchedulePage();
+      case 2:
+        return AboutUsPage();
       case 3:
         return SettingsPage();
     }
@@ -77,8 +80,8 @@ class _ScreenState extends State<Screen> {
                 label: 'Rutinitas',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.help),
-                label: 'Bantuan',
+                icon: Icon(Icons.info),
+                label: 'About Us',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.settings),
