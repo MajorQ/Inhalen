@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Diskus",
+        "description": "Merupakan salah satu jenis inhaler yang dapat mengobati Penyakit Paru Obstruktif Kronis (PPOK). Memiliki bentuk lingkaran dengan sistem pengunci yang dibuka dengan ibu jari.",
+        "video_id": "mfiShjE9P-Q"
+    },
+    {
+        "name": "Turbuhaler",
+        "description": "Turbuhaler adalah salah satu jenis inhaler berbentuk tabung yang didalamnya terdapat obat dalam bentuk bubuk kering. Perangkat ini digunakan dengan cara menghisap obat melalui mulut, kemudian diteruskan ke paru-paru",
+        "video_id":"DqoEdW6dHaI"
+    },
+    {
+        "name": "Respimat",
+        "description": "Merupakan salah satu jenis Inhaler yang digunakan untuk terapi pemeliharaan PPOK termasuk bronkhitis, emfisema, dan gangguan terkait dengan Dispnea dan untuk mencegah exaserbasi. Inhaler ini berbentuk tabung dengan tombol pengaman.",
+        "video_id": "U1NV10RuV6Y"
+    },
+    {
+        "name": "pMDI",
+        "description": "MDI merupakan alat inhaler dengan dosis tertentu yang memberikan dosis zat aktif disetiap isapan. MDI terdiri dari suspensi atau dispresi satu atau lebih bahan aktif dalam propellant atau campuran propellant dengan pelarut. Untuk pMDI sendiri adalah jenis MDI yang bekerja berdasarkan propellant bertekanan di ruang aerosol.",
+        "video_id": "fHYTz-ZoRLw"
+    },
+    {
+        "name": "Breezhaler",
+        "description": "Breezhaler biasa digunakan berbagai obat-obatan untuk pasien PPOK seperti Onbrez indacaterol), Seebri (glycopyrronium), dan Ultibro (glycopyrronium plus indacaterol). Breezhaler diindikasikan sebagai pemeliharaan dalam perawatan bronkodilator sekali hari untuk meredakan gejala pasien dengan penyakit paru obstruktif kronik (PPOK).",
+        "video_id": "s5gWSxz3EWw"
+    }
+]

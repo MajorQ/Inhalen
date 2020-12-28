@@ -34,7 +34,7 @@ class ReminderCard extends StatelessWidget {
         slimeCardElevation: 0.5,
         cardsGap: 3.0,
         controller: reminderObject.controller,
-        slidingCardWidth: 384.0,
+        slidingCardWidth: 368.0,
         visibleCardHeight: 108.0,
         hiddenCardHeight: 95.0,
         frontCardWidget: FrontReminderCard(

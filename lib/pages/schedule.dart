@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:inhalen/services/colors.dart';
-import 'package:inhalen/services/reminder_model.dart';
 import 'package:inhalen/services/reminder_data.dart';
 import 'package:inhalen/services/notification_plugin.dart';
+import 'package:inhalen/services/reminder_model.dart';
 import 'package:inhalen/widgets/reminder_card/reminder_card.dart';
 
 class SchedulePage extends StatelessWidget {
@@ -77,42 +78,43 @@ class SchedulePage extends StatelessWidget {
               },
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: FloatingActionButton(
-                backgroundColor: CustomColors.maroon,
-                foregroundColor: Colors.black,
-                onPressed: () async {
-                  ReminderModel reminderModel =
-                      Provider.of<ReminderModel>(context, listen: false);
-                  reminderModel.addReminder();
-                  int last = reminderModel.length - 1;
-                  var currentTime =
-                      await pickTime(context, reminderModel, last);
-                  if (currentTime != null) {
-                    reminderModel.changeTimeOnIndex(last, currentTime);
-                  } else {
-                    reminderModel.deleteReminder(last);
-                  }
-                },
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: FloatingActionButton(
+              backgroundColor: CustomColors.maroon,
+              foregroundColor: Colors.black,
+              onPressed: () async {
+                var reminderModel =
+                    Provider.of<ReminderModel>(context, listen: false);
+                reminderModel.add();
+                int last = reminderModel.length - 1;
+                var currentTime = await pickTime(context, reminderModel, last);
+                if (currentTime != null) {
+                  reminderModel.changeTimeAt(last, currentTime);
+                } else {
+                  reminderModel.delete(last);
+                }
+              },
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
               ),
             ),
-          )
-        ]));
+          ),
+        )
+      ]),
+    );
   }
 
-  // Function for time picker
+  /// Function to show time picker and change [time] on a [ReminderData] object
   Future<TimeOfDay> pickTime(
       BuildContext context, ReminderModel reminderModel, int i) async {
-    TimeOfDay _time = await showTimePicker(
+    TimeOfDay time = await showTimePicker(
         context: context,
-        initialTime: reminderModel.getTimeFromIndex(i),
+        initialTime: reminderModel.getTimeFrom(i),
         cancelText: 'Cancel',
         helpText: 'Select Time',
         builder: (BuildContext context, Widget child) {
@@ -156,17 +158,17 @@ class SchedulePage extends StatelessWidget {
           );
         });
 
-    if (_time != null) reminderModel.changeTimeOnIndex(i, _time);
+    if (time != null) reminderModel.changeTimeAt(i, time);
 
-    return _time;
+    return time;
   }
 
-  //function for label picker
+  /// Function to change [label] on a [ReminderData] object
   pickLabel(BuildContext context, ReminderModel reminderModel, int i) async {
     showDialog(
         context: context,
         builder: (context) {
-          //show text fields input
+          /// Show text fields input
           return AlertDialog(
             backgroundColor: CustomColors.yellow,
             content: Form(
@@ -181,13 +183,13 @@ class SchedulePage extends StatelessWidget {
                       fontStyle: FontStyle.normal,
                     ),
                     errorStyle: TextStyle(
-                      fontFamily: 'Raleway',
-                      fontStyle: FontStyle.normal,
-                    )),
+                        fontFamily: 'Raleway',
+                        fontStyle: FontStyle.normal,
+                        fontSize: 14.0)),
                 maxLength: 8,
                 keyboardType: TextInputType.name,
                 onSaved: (String value) {
-                  reminderModel.changeLabelOnIndex(i, value);
+                  reminderModel.changeLabelAt(i, value);
                 },
                 validator: (String value) {
                   return value.length > 8
@@ -196,7 +198,8 @@ class SchedulePage extends StatelessWidget {
                 },
               ),
             ),
-            // Button for cancel or submit label
+
+            /// Button to cancel or submit label
             actions: [
               FlatButton(
                 onPressed: () => Navigator.of(context).pop(),
@@ -210,7 +213,6 @@ class SchedulePage extends StatelessWidget {
                 ),
               ),
               FlatButton(
-                // textColor: CustomColors.maroon,
                 onPressed: () {
                   if (_labelKey.currentState.validate()) {
                     _labelKey.currentState.save();

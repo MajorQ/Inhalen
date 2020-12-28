@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:inhalen/services/colors.dart';
 import 'package:sliding_card/sliding_card.dart';
+
+import 'package:inhalen/services/colors.dart';
 
 class ReminderData {
   TimeOfDay time;
   String label;
-  bool switchON;
+  bool isEnabled;
   List<bool> daySelection;
   SlidingCardController controller;
 
   ReminderData({
     this.time,
     this.label,
-    this.switchON,
+    this.isEnabled,
     this.daySelection,
-  }) : controller = new SlidingCardController();
+  }) : controller = SlidingCardController();
 
-  String get getDays {
+  /// Get text about days (every day/select day) from [daySelection]
+  String get days {
     String days = '';
     List<String> dayList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     bool first = true;
@@ -42,40 +44,51 @@ class ReminderData {
     return days;
   }
 
+  /// Get color of [ReminderCard] based on [isEnabled] value
   Color get cardColor {
-    if (switchON)
+    if (isEnabled)
       return CustomColors.yellow;
     else
       return CustomColors.lightGray;
   }
 
-  void fromMap(Map map) {
-    this.time = TimeOfDay(hour: map['hour'], minute: map['minute']);
-    this.label = map['label'] ?? 'label';
-    this.switchON = (map['switchON'] == 1);
-    // Get daySelection
-    this.daySelection[0] = (map['monday'] == 1);
-    this.daySelection[1] = (map['tuesday'] == 1);
-    this.daySelection[2] = (map['wednesday'] == 1);
-    this.daySelection[3] = (map['thursday'] == 1);
-    this.daySelection[4] = (map['friday'] == 1);
-    this.daySelection[5] = (map['saturday'] == 1);
-    this.daySelection[6] = (map['sunday'] == 1);
+  /// Set variables on [ReminderData] instance based on map
+  ReminderData.fromMap(Map map) {
+    time = TimeOfDay(hour: map['hour'], minute: map['minute']);
+    label = map['label'] ?? 'label';
+    isEnabled = (map['isEnabled'] == 1);
+
+    /// Get [daySelection] from map
+    daySelection = [
+      (map['monday'] == 1),
+      (map['tuesday'] == 1),
+      (map['wednesday'] == 1),
+      (map['thursday'] == 1),
+      (map['friday'] == 1),
+      (map['saturday'] == 1),
+      (map['sunday'] == 1),
+    ];
+
+    controller = SlidingCardController();
   }
 
-  Map<String, dynamic> toMap(int index) => {
-        'id': index,
-        'hour': this.time.hour,
-        'minute': this.time.minute,
-        'label': this.label,
-        'switchON': (this.switchON) ? 1 : 0,
-        // Set daySelection
-        'monday': (this.daySelection[0]) ? 1 : 0,
-        'tuesday': (this.daySelection[1]) ? 1 : 0,
-        'wednesday': (this.daySelection[2]) ? 1 : 0,
-        'thursday': (this.daySelection[3]) ? 1 : 0,
-        'friday': (this.daySelection[4]) ? 1 : 0,
-        'saturday': (this.daySelection[5]) ? 1 : 0,
-        'sunday': (this.daySelection[6]) ? 1 : 0,
-      };
+  /// Convert from [ReminderData] instance to a map
+  Map<String, dynamic> toMap(int index) {
+    return {
+      'id': index,
+      'hour': time.hour,
+      'minute': time.minute,
+      'label': label,
+      'isEnabled': (isEnabled) ? 1 : 0,
+
+      /// Set [daySelection] to map value
+      'monday': (daySelection[0]) ? 1 : 0,
+      'tuesday': (daySelection[1]) ? 1 : 0,
+      'wednesday': (daySelection[2]) ? 1 : 0,
+      'thursday': (daySelection[3]) ? 1 : 0,
+      'friday': (daySelection[4]) ? 1 : 0,
+      'saturday': (daySelection[5]) ? 1 : 0,
+      'sunday': (daySelection[6]) ? 1 : 0,
+    };
+  }
 }
