@@ -8,11 +8,9 @@ import 'package:inhalen/services/reminder_model.dart';
 import 'package:inhalen/services/settings_model.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  notificationPlugin.configureLocalTimeZone();
-  notificationPlugin.initializeNotificationPlugin();
   runApp(MultiProvider(
     providers: [
+      Provider(create: (context) => NotificationPlugin()),
       Provider(create: (context) => SQFliteHelper()),
       ChangeNotifierProxyProvider<SQFliteHelper, SettingsModel>(
           create: (context) => SettingsModel(),
@@ -25,7 +23,6 @@ void main() {
     ],
     child: MyApp(),
   ));
-  
 }
 
 class MyApp extends StatefulWidget {
@@ -37,6 +34,8 @@ class _MyAppState extends State<MyApp> {
   /// Initialize app
   void initState() {
     /// Set temporary variables for database and provider models
+    var notificationPlugin =
+        Provider.of<NotificationPlugin>(context, listen: false);
     var sqfliteHelper = Provider.of<SQFliteHelper>(context, listen: false);
     var reminderModel = Provider.of<ReminderModel>(context, listen: false);
     var settingsModel = Provider.of<SettingsModel>(context, listen: false);
@@ -47,7 +46,10 @@ class _MyAppState extends State<MyApp> {
       reminderModel.fetch();
     });
 
-    
+    /// Initialie notification plugin
+    notificationPlugin.configureLocalTimeZone();
+    notificationPlugin.initializeNotificationPlugin();
+
     super.initState();
   }
 
@@ -60,7 +62,4 @@ class _MyAppState extends State<MyApp> {
         ),
         home: Screen());
   }
-
 }
-
-

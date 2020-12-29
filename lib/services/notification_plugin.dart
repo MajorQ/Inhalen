@@ -1,38 +1,42 @@
 // import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz; 
+import 'package:timezone/timezone.dart' as tz;
 
 class NotificationPlugin {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-  MethodChannel platform =
-    MethodChannel('dexterx.dev/flutter_local_notifications_example');
+      FlutterLocalNotificationsPlugin();
 
- initializeNotificationPlugin() async {
-  // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('inhalen');
-  InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid);
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (String payload) async {
-        if (payload != null) {
-          print('notification payload: $payload');
-        }
-      });
+  initializeNotificationPlugin() async {
+    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('inhalen');
+    InitializationSettings initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (String payload) async {
+      if (payload != null) {
+        print('notification payload: $payload');
+      }
+    });
   }
 
   Future<void> configureLocalTimeZone() async {
     tz.initializeTimeZones();
-    final String timeZoneName = await platform.invokeMethod('getTimeZoneName');
+    String timeZoneName;
+    try {
+      timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+      tz.setLocalLocation(tz.getLocation(timeZoneName));
+    } catch (e) {
+      print(e);
+    }
     print(timeZoneName);
-    tz.setLocalLocation(tz.getLocation(timeZoneName));
   }
 
   Future<void> scheduleNotification() async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
       'INHALEN_ID',
       'INHALEN',
       'INHALEN_APP',
@@ -44,11 +48,11 @@ class NotificationPlugin {
       timeoutAfter: 30000,
     );
     const NotificationDetails platformChannelSpecifics =
-    NotificationDetails(android: androidPlatformChannelSpecifics);
+        NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.zonedSchedule(
         0,
-        'Gokil',
-        'Alhamdulillah',
+        'Inhalen',
+        'Saatnya menggunakan obat anda!',
         tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
         platformChannelSpecifics,
         androidAllowWhileIdle: true,
@@ -64,8 +68,5 @@ class NotificationPlugin {
     List<PendingNotificationRequest> p =
         await flutterLocalNotificationsPlugin.pendingNotificationRequests();
     return p.length;
+  }
 }
-
-}
-
-var notificationPlugin = NotificationPlugin();
