@@ -11,7 +11,7 @@ class NotificationPlugin {
   initializeNotificationPlugin() async {
     // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('inhalen');
+        AndroidInitializationSettings('inhalen_notif');
     InitializationSettings initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
@@ -28,10 +28,9 @@ class NotificationPlugin {
     try {
       timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
       tz.setLocalLocation(tz.getLocation(timeZoneName));
-    } catch (e) {
-      print(e);
+    } catch (error) {
+      print(error);
     }
-    print(timeZoneName);
   }
 
   Future<void> scheduleNotification() async {
@@ -42,10 +41,9 @@ class NotificationPlugin {
       'INHALEN_APP',
       importance: Importance.max,
       priority: Priority.high,
-      showWhen: false,
+      showWhen: true,
       sound: RawResourceAndroidNotificationSound('medical_system'),
       playSound: true,
-      timeoutAfter: 30000,
     );
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);

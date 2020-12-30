@@ -12,7 +12,7 @@ class SchedulePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var notificationPlugin = Provider.of<NotificationPlugin>(context);
+    var notificationPlugin = Provider.of<NotificationPlugin>(context, listen: false);
     return Container(
       color: Colors.white,
       child: Stack(alignment: Alignment.topCenter, children: <Widget>[
@@ -44,7 +44,6 @@ class SchedulePage extends StatelessWidget {
                           reminderObject: reminders[index],
                           onTimePressed: () async {
                             await pickTime(context, reminderModel, index);
-                            await notificationPlugin.scheduleNotification();
                             print(await notificationPlugin
                                 .getPendingNotificationCount());
                           },
@@ -113,6 +112,7 @@ class SchedulePage extends StatelessWidget {
   /// Function to show time picker and change [time] on a [ReminderData] object
   Future<TimeOfDay> pickTime(
       BuildContext context, ReminderModel reminderModel, int i) async {
+    var notificationPlugin = Provider.of<NotificationPlugin>(context, listen: false);
     TimeOfDay time = await showTimePicker(
         context: context,
         initialTime: reminderModel.getTimeFrom(i),
@@ -159,7 +159,10 @@ class SchedulePage extends StatelessWidget {
           );
         });
 
-    if (time != null) reminderModel.changeTimeAt(i, time);
+    if (time != null) {
+      reminderModel.changeTimeAt(i, time);
+      notificationPlugin.scheduleNotification();
+    } 
 
     return time;
   }
