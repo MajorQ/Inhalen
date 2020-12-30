@@ -1,12 +1,15 @@
 // import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:inhalen/services/reminder_model.dart';
+import 'package:inhalen/services/reminder_data.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationPlugin {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+  var tempReminder = ReminderData();
 
   initializeNotificationPlugin() async {
     // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
@@ -33,7 +36,8 @@ class NotificationPlugin {
     }
   }
 
-  Future<void> scheduleNotification() async {
+  Future<void> scheduleNotification(ReminderModel reminderModel, int index) async {
+    List<ReminderData> reminders = reminderModel.list;
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
       'INHALEN_ID',
@@ -46,16 +50,35 @@ class NotificationPlugin {
       playSound: true,
     );
     const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
+        NotificationDetails(android: androidPlatformChannelSpecifics);        
     await flutterLocalNotificationsPlugin.zonedSchedule(
-        0,
-        'Inhalen',
+        index,
+        'Reminder ${reminders[index].label}',
         'Saatnya menggunakan obat anda!',
-        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+        _scheduleReminder(reminders[index]),
         platformChannelSpecifics,
         androidAllowWhileIdle: true,
+        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime);
+  }
+  
+  tz.TZDateTime _scheduleTime(int hour, int minute) {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledReminder =
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
+    if (scheduledReminder.isBefore(now)) {
+      scheduledReminder = scheduledReminder.add(const Duration(days: 1));
+    }
+    return scheduledReminder;
+  }
+
+  tz.TZDateTime _scheduleReminder(ReminderData reminder) {
+    tz.TZDateTime scheduledReminder = _scheduleTime(reminder.time.hour, reminder.time.minute);
+    if (!reminder.daySelection[scheduledReminder.weekday-1]) {
+      scheduledReminder = scheduledReminder.add(const Duration(days: 1));
+    }
+    return scheduledReminder;
   }
 
   void cancelNotification() async {

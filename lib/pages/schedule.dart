@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:inhalen/services/colors.dart';
 import 'package:inhalen/services/reminder_data.dart';
 import 'package:inhalen/services/notification_plugin.dart';
@@ -51,8 +50,12 @@ class SchedulePage extends StatelessWidget {
                               reminderModel.changeStateAt(state, index),
                           addLabel: () =>
                               pickLabel(context, reminderModel, index),
-                          toggleDays: (day) =>
-                              reminderModel.toggleDaysAt(day, index),
+                          toggleDays: (day) async {
+                            reminderModel.toggleDaysAt(day, index);
+                            notificationPlugin.scheduleNotification(reminderModel, index);
+                            print(await notificationPlugin
+                                .getPendingNotificationCount());
+                          },
                           delete: () async {
                             notificationPlugin.cancelNotification();
                             print(await notificationPlugin
@@ -161,7 +164,7 @@ class SchedulePage extends StatelessWidget {
 
     if (time != null) {
       reminderModel.changeTimeAt(i, time);
-      notificationPlugin.scheduleNotification();
+      notificationPlugin.scheduleNotification(reminderModel, i);
     } 
 
     return time;

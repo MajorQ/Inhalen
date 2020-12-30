@@ -7,6 +7,7 @@ class ReminderModel extends ChangeNotifier {
   /// List of ReminderData and a DatabaseHelper instance
   SQFliteHelper sqfliteHelper;
   List<ReminderData> _reminders = [];
+  
 
   /// Returns the list of reminders
   List<ReminderData> get list => _reminders;
