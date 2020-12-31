@@ -36,40 +36,6 @@ class NotificationPlugin {
     }
   }
 
-  Future<void> scheduleNotification(ReminderModel reminderModel, int index) async {
-    List<ReminderData> reminders = reminderModel.list;
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'INHALEN_ID',
-      'INHALEN',
-      'INHALEN_APP',
-      importance: Importance.max,
-      priority: Priority.high,
-      showWhen: true,
-      sound: RawResourceAndroidNotificationSound('medical_system'),
-      playSound: true,
-    );
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics); 
-
-    if (!reminders[index].isEnabled) {
-      cancelNotification(index);
-    }
-    else {
-      await flutterLocalNotificationsPlugin.zonedSchedule(
-          index,
-          'Reminder ${reminders[index].label}',
-          'Saatnya menggunakan obat anda!',
-          _scheduleReminder(reminders[index]),
-          platformChannelSpecifics,
-          androidAllowWhileIdle: true,
-          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime);
-    }
-    print(await getPendingNotificationCount());
-  }
-  
   tz.TZDateTime _scheduleTime(int hour, int minute) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     tz.TZDateTime scheduledReminder =
@@ -88,7 +54,52 @@ class NotificationPlugin {
     return scheduledReminder;
   }
 
-  void cancelNotification(int index) async {
+  Future<void> scheduleNotification(ReminderModel reminderModel, int index) async {
+    List<ReminderData> reminders = reminderModel.list;
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'INHALEN_ID',
+      'INHALEN',
+      'INHALEN_APP',
+      importance: Importance.max,
+      priority: Priority.high,
+      showWhen: true,
+      sound: RawResourceAndroidNotificationSound('medical_system'),
+      playSound: true,
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics); 
+
+    if (!reminders[index].isEnabled) {
+      _cancelNotification(index);
+    }
+    else {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+          index,
+          'Reminder ${reminders[index].label}',
+          'Saatnya menggunakan obat anda!',
+          _scheduleReminder(reminders[index]),
+          platformChannelSpecifics,
+          androidAllowWhileIdle: true,
+          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime);
+    }
+    print(await getPendingNotificationCount());
+  }
+
+  Future<void> updateNotifications(ReminderModel reminderModel) async {
+    int countReminder = reminderModel.length;
+    print(countReminder);
+    await flutterLocalNotificationsPlugin.cancelAll();
+    print(await getPendingNotificationCount());
+
+    for(int i=0; i < countReminder; i++) {
+      await scheduleNotification(reminderModel, i);
+    }
+  }
+
+  void _cancelNotification(int index) async {
     await flutterLocalNotificationsPlugin.cancel(index);
   }
 
