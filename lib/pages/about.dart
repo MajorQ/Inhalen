@@ -2,16 +2,17 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class AboutUsPage extends StatelessWidget {
-  PageController pageController;
-  List<String> name = [
+  final PageController pageController =
+      PageController(initialPage: 1, viewportFraction: 0.8);
+  final List<String> name = [
     'Muhammad Salman A.',
     'Muhammad Alfi A.',
     'Muhammad Farhan A.'
   ];
-  List<String> images = ['salman', 'aldo', 'farhan'];
+  final List<String> images = ['salman', 'aldo', 'farhan'];
+
   @override
   Widget build(BuildContext context) {
-    pageController = PageController(initialPage: 1, viewportFraction: 0.8);
     return Scaffold(
       body: ListView(children: [
         SizedBox(
