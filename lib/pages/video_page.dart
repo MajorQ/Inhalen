@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inhalen/pages/information.dart';
 import 'package:inhalen/services/colors.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoPage extends StatefulWidget {
   final String videoId;
@@ -20,12 +20,10 @@ class _VideoPageState extends State<VideoPage> {
   void initState() {
     try {
       _controller = YoutubePlayerController(
-        initialVideoId: widget.videoId,
-        params: YoutubePlayerParams(
-          showControls: true,
-          showFullscreenButton: true,
-        ),
-      );
+          initialVideoId: widget.videoId,
+          flags: YoutubePlayerFlags(
+            autoPlay: true,
+          ));
     } catch (e) {
       print(widget.videoId);
       print('video id not found');
@@ -53,9 +51,9 @@ class _VideoPageState extends State<VideoPage> {
                 )),
             Container(
                 padding: const EdgeInsets.all(16.0),
-                child: YoutubePlayerIFrame(
+                child: YoutubePlayer(
                   controller: _controller,
-                  aspectRatio: 16 / 9,
+                  showVideoProgressIndicator: true,
                 )),
           ],
         ),
@@ -65,7 +63,7 @@ class _VideoPageState extends State<VideoPage> {
 
   @override
   void dispose() {
-    _controller.close();
+    // _controller.close();
     super.dispose();
   }
 }
