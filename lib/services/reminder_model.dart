@@ -62,6 +62,12 @@ class ReminderModel extends ChangeNotifier {
   /// Change [daySelection] based on user toggle then updates the database
   void toggleDaysAt(dynamic day, int index) {
     _reminders[index].daySelection[day] = !_reminders[index].daySelection[day];
+    if(!_reminders[index].daySelection.contains(true)) {
+      _reminders[index].isEnabled = false;
+    } else {
+      _reminders[index].isEnabled = true;
+    }
+      
     sqfliteHelper.updateReminder(index, _reminders[index].toMap(index));
     notifyListeners();
   }
