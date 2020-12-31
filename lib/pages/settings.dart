@@ -1,10 +1,20 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:inhalen/services/colors.dart';
 import 'package:inhalen/services/settings_model.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
+  @override
+  _SettingsPageState createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
   final GlobalKey<FormState> _labelKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Consumer<SettingsModel>(
@@ -12,18 +22,69 @@ class SettingsPage extends StatelessWidget {
         return Container(
           width: double.infinity,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextButton.icon(
-                onPressed: () => _pickLabel(context, settingsModel),
-                icon: Icon(Icons.edit, size: 40, color: CustomColors.maroon),
-                label: Text(settingsModel.username,
-                    style: TextStyle(
-                        fontFamily: 'Raleway',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 39.0,
-                        color: CustomColors.maroon)),
-              )
+              Text('bottom_navbar_icons.settings',
+                      style: Theme.of(context).textTheme.headline4)
+                  .tr(),
+              SizedBox(
+                height: 30,
+              ),
+              GestureDetector(
+                onTap: () => _pickLabel(context, settingsModel),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Icon(Icons.person, size: 24),
+                    ),
+                    Text('name', style: Theme.of(context).textTheme.headline5)
+                        .tr(),
+                    Spacer(flex: 10),
+                    Text(settingsModel.username,
+                        style: Theme.of(context).textTheme.headline5.copyWith(
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.normal)),
+                    Spacer(),
+                    Icon(Icons.keyboard_arrow_down,
+                        color: Colors.grey[700], size: 32),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Icon(Icons.language, size: 24),
+                  ),
+                  Text('language', style: Theme.of(context).textTheme.headline5)
+                      .tr(),
+                  Spacer(flex: 10),
+                  DropdownButton<String>(
+                      value: context.locale.languageCode,
+                      icon: Icon(Icons.keyboard_arrow_down,
+                          color: Colors.grey[700]),
+                      iconSize: 32,
+                      style: Theme.of(context).textTheme.headline5.copyWith(
+                          color: Colors.grey[700],
+                          fontWeight: FontWeight.normal),
+                      items: [
+                        DropdownMenuItem(value: 'id', child: Text('Indonesia')),
+                        DropdownMenuItem(value: 'en', child: Text('English')),
+                      ],
+                      onChanged: ((value) {
+                        setState(() {
+                          context.locale = Locale(value);
+                        });
+                      })),
+                ],
+              ),
             ],
           ),
         );
@@ -51,7 +112,7 @@ class SettingsPage extends StatelessWidget {
                       borderSide: BorderSide(color: Colors.white54)),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white)),
-                  labelText: 'Enter your name',
+                  labelText: 'name_input'.tr(),
                   labelStyle: TextStyle(
                     fontFamily: 'Raleway',
                     fontStyle: FontStyle.normal,
@@ -68,15 +129,13 @@ class SettingsPage extends StatelessWidget {
                       fontStyle: FontStyle.normal,
                       color: Colors.white),
                 ),
-                maxLength: 15,
+                maxLength: 12,
                 keyboardType: TextInputType.name,
                 onSaved: (String value) {
                   model.username = value;
                 },
                 validator: (String value) {
-                  return value.length > 15
-                      ? 'Username must be less\nthan 15 characters!'
-                      : null;
+                  return value.length > 12 ? 'name_input_validator'.tr() : null;
                 },
               ),
             ),
@@ -86,7 +145,7 @@ class SettingsPage extends StatelessWidget {
               FlatButton(
                 onPressed: () => Navigator.of(context).pop(),
                 child: Text(
-                  'Cancel',
+                  'cancel'.tr(),
                   style: TextStyle(
                     fontFamily: 'OpenSans',
                     color: Colors.white,
