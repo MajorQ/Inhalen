@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:inhalen/services/colors.dart';
-import 'package:inhalen/services/reminder_data.dart';
 import 'package:inhalen/services/notification_plugin.dart';
+import 'package:inhalen/services/reminder_data.dart';
 import 'package:inhalen/services/reminder_model.dart';
 import 'package:inhalen/widgets/reminder_card/reminder_card.dart';
 
@@ -11,23 +13,17 @@ class SchedulePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var notificationPlugin = Provider.of<NotificationPlugin>(context, listen: false);
+    var notificationPlugin =
+        Provider.of<NotificationPlugin>(context, listen: false);
     return Container(
       color: Colors.white,
       child: Stack(alignment: Alignment.topCenter, children: <Widget>[
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 55.0, 0, 0),
-          child:
-              Text('Tambahkan reminder agar Anda\ntidak lupa menggunakan obat!',
+          child: Text('add_reminder',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    letterSpacing: 0.15,
-                    fontFamily: 'Raleway',
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
-                  )),
+                  style: Theme.of(context).textTheme.subtitle1)
+              .tr(),
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 131, 0, 105),
@@ -46,17 +42,20 @@ class SchedulePage extends StatelessWidget {
                           },
                           onSwitchChanged: (bool state) async {
                             reminderModel.changeStateAt(state, index);
-                            await notificationPlugin.scheduleNotification(reminderModel, index);
+                            await notificationPlugin.scheduleNotification(
+                                reminderModel, index);
                           },
                           addLabel: () =>
                               pickLabel(context, reminderModel, index),
                           toggleDays: (day) async {
                             reminderModel.toggleDaysAt(day, index);
-                            await notificationPlugin.scheduleNotification(reminderModel, index);
+                            await notificationPlugin.scheduleNotification(
+                                reminderModel, index);
                           },
                           delete: () async {
                             reminderModel.delete(index);
-                            await notificationPlugin.updateNotifications(reminderModel);
+                            await notificationPlugin
+                                .updateNotifications(reminderModel);
                           },
                           onCardTapped: () {
                             if (reminders[index].controller.isCardSeparated ==
@@ -111,12 +110,13 @@ class SchedulePage extends StatelessWidget {
   /// Function to show time picker and change [time] on a [ReminderData] object
   Future<TimeOfDay> pickTime(
       BuildContext context, ReminderModel reminderModel, int i) async {
-    var notificationPlugin = Provider.of<NotificationPlugin>(context, listen: false);
+    var notificationPlugin =
+        Provider.of<NotificationPlugin>(context, listen: false);
     TimeOfDay time = await showTimePicker(
         context: context,
         initialTime: reminderModel.getTimeFrom(i),
-        cancelText: 'Cancel',
-        helpText: 'Select Time',
+        cancelText: 'cancel'.tr(),
+        helpText: 'select_time'.tr(),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData(
@@ -161,7 +161,7 @@ class SchedulePage extends StatelessWidget {
     if (time != null) {
       reminderModel.changeTimeAt(i, time);
       await notificationPlugin.scheduleNotification(reminderModel, i);
-    } 
+    }
 
     return time;
   }
@@ -178,7 +178,7 @@ class SchedulePage extends StatelessWidget {
               key: _labelKey,
               child: TextFormField(
                 decoration: InputDecoration(
-                    labelText: 'Label',
+                    labelText: 'label_input'.tr(),
                     focusColor: CustomColors.blue,
                     border: OutlineInputBorder(),
                     labelStyle: TextStyle(
@@ -195,9 +195,7 @@ class SchedulePage extends StatelessWidget {
                   reminderModel.changeLabelAt(i, value);
                 },
                 validator: (String value) {
-                  return value.length > 8
-                      ? 'Label must be less than or\nequal to 8 letters'
-                      : null;
+                  return value.length > 8 ? 'label_input_validator'.tr() : null;
                 },
               ),
             ),
@@ -207,7 +205,7 @@ class SchedulePage extends StatelessWidget {
               FlatButton(
                 onPressed: () => Navigator.of(context).pop(),
                 child: Text(
-                  'Cancel',
+                  'cancel'.tr(),
                   style: TextStyle(
                     fontFamily: 'OpenSans',
                     color: CustomColors.maroon,

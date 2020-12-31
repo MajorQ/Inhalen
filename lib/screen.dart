@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:inhalen/pages/home.dart';
 import 'package:inhalen/pages/schedule.dart';
 import 'package:inhalen/pages/settings.dart';
-import 'package:inhalen/pages/about.dart';
 import 'package:inhalen/services/colors.dart';
 
 class Screen extends StatefulWidget {
@@ -28,8 +28,6 @@ class _ScreenState extends State<Screen> {
       case 1:
         return SchedulePage();
       case 2:
-        return AboutUsPage();
-      case 3:
         return SettingsPage();
     }
     return SchedulePage();
@@ -70,22 +68,18 @@ class _ScreenState extends State<Screen> {
             unselectedItemColor: Colors.black.withOpacity(0.38),
             selectedItemColor: CustomColors.maroon,
             showUnselectedLabels: true,
-            items: const <BottomNavigationBarItem>[
+            items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(Icons.book),
-                label: 'Belajar',
+                icon: Icon(Icons.home),
+                label: 'bottom_navbar_icons.home'.tr(),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.alarm),
-                label: 'Rutinitas',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.info),
-                label: 'About Us',
+                label: 'bottom_navbar_icons.routine'.tr(),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.settings),
-                label: 'Pengaturan',
+                label: 'bottom_navbar_icons.settings'.tr(),
               ),
             ]),
       ),

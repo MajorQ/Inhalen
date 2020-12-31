@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:inhalen/pages/video_page.dart';
 import 'package:inhalen/services/colors.dart';
 
@@ -23,13 +24,9 @@ class BackAppbar extends StatelessWidget implements PreferredSizeWidget {
       title: Padding(
         padding: const EdgeInsets.only(top: 16.0),
         child: Text(
-          'KEMBALI',
-          style: TextStyle(
-              fontFamily: 'OpenSans',
-              fontSize: 24,
-              color: Colors.black,
-              letterSpacing: 1.5),
-        ),
+          'back_button',
+          style: Theme.of(context).textTheme.headline5,
+        ).tr(),
       ),
       centerTitle: false,
     );
@@ -58,8 +55,8 @@ class Information extends StatelessWidget {
               child: Material(
                 color: Colors.transparent,
                 child: Container(
-                  height: 300,
-                  width: 200,
+                  height: 250,
+                  width: 250,
                   margin: EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
                       image: DecorationImage(
@@ -70,7 +67,6 @@ class Information extends StatelessWidget {
               ),
             ),
             Container(
-              height: 305,
               width: double.infinity,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
@@ -103,24 +99,17 @@ class BottomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(top: 25, left: 25),
-            child: Text(
-              inhalerInfo['name'],
-              style: TextStyle(
-                  fontFamily: 'Raleway',
-                  color: CustomColors.maroon,
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold),
-            ),
+            margin: EdgeInsets.only(top: 25, left: 20),
+            child: Text(inhalerInfo['name'],
+                style: Theme.of(context).textTheme.headline4),
           ),
           Container(
-            margin: EdgeInsets.only(top: 20, left: 25),
-            height: 100,
-            width: 360,
+            margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+            width: double.infinity,
             child: Text(
               inhalerInfo['description'],
               style: TextStyle(
@@ -129,11 +118,9 @@ class BottomCard extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: 30,
-          ),
           Center(
             child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 24),
               width: 350,
               height: 50,
               child: RaisedButton(
@@ -141,13 +128,13 @@ class BottomCard extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   child: Text(
-                    'CARA PEMAKAIAN',
+                    'how_to_use_button',
                     style: TextStyle(
                       fontSize: 16,
                       fontFamily: 'Open Sans',
                       color: Colors.white,
                     ),
-                  ),
+                  ).tr(),
                   onPressed: () {
                     Navigator.push(
                         context,

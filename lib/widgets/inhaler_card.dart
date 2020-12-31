@@ -45,8 +45,8 @@ class InhalerCard extends StatelessWidget {
                     left: 24.0,
                     bottom: 64.0,
                     child: Container(
-                      height: 240.0,
-                      width: 240.0,
+                      height: 250.0,
+                      width: 250.0,
                       child: Image.asset(
                         'assets/images/${inhalerInfo['name']}.png',
                         fit: BoxFit.contain,
@@ -62,11 +62,7 @@ class InhalerCard extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Text(
                         inhalerInfo['name'],
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: "Raleway",
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.5),
+                        style: Theme.of(context).textTheme.headline5,
                       ),
                     ),
                   )

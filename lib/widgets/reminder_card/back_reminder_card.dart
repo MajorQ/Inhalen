@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:inhalen/services/colors.dart';
 import 'package:inhalen/services/reminder_data.dart';
 
@@ -30,13 +31,13 @@ class BackReminderCard extends StatelessWidget {
             top: 10,
             child: ToggleButtons(
               children: <Widget>[
-                Text('   M   '),
-                Text('   T   '),
-                Text('   W   '),
-                Text('   T   '),
-                Text('   F   '),
-                Text('   S   '),
-                Text('   S   '),
+                LetterWidget(letter: 'm'),
+                LetterWidget(letter: 't'),
+                LetterWidget(letter: 'w'),
+                LetterWidget(letter: 't'),
+                LetterWidget(letter: 'f'),
+                LetterWidget(letter: 's'),
+                LetterWidget(letter: 's'),
               ],
               textStyle: TextStyle(
                 fontFamily: 'OpenSans',
@@ -77,18 +78,34 @@ class BackReminderCard extends StatelessWidget {
               FlatButton.icon(
                 onPressed: delete,
                 label: Text(
-                  'Delete',
+                  'delete',
                   style: TextStyle(
                     color: CustomColors.black,
                     fontFamily: 'OpenSans',
                   ),
-                ),
+                ).tr(),
                 icon: Icon(Icons.delete, color: CustomColors.black),
               ),
             ],
           ),
         ],
       ),
+    );
+  }
+}
+
+class LetterWidget extends StatelessWidget {
+  final String letter;
+  const LetterWidget({
+    @required this.letter,
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Text(letter.toUpperCase()),
     );
   }
 }

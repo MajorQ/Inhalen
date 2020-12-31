@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Diskus",
+        "description": "Is one of the inhalers that can treate Cronic Obstructive Pulmonary Disease(COPD). Diskus is circle-shaped and has a locking mechanism which can be opened using the thumb.",
+        "video_id": "mfiShjE9P-Q"
+    },
+    {
+        "name": "Turbuhaler",
+        "description": "Is one of the inhalers that is drum-shaped and can be inserted with powdered medicine inside. This inhaler is used by sucking the medicine using your mouth, then inhaling it to your lungs.",
+        "video_id":"DqoEdW6dHaI"
+    },
+    {
+        "name": "Respimat",
+        "description": "Is one of the inhalers that is used as a therapy for COPD care including bronchitis, emphysema, disorders associated with dyspnea, and to prevent exacerbations. This inhaler is shaped like a drum with a button lock.",
+        "video_id": "U1NV10RuV6Y"
+    },
+    {
+        "name": "pMDI",
+        "description": "Is an inhaler with a certain dosage that provides a dose of the active substance in each puff. MDI consists of suspension and dispersion of one or more active substances in the propellant or propellant and solvent mix. pMDI is a type of MDI that works based on the pressurized propellant in the aerosol chamber.",
+        "video_id": "fHYTz-ZoRLw"
+    },
+    {
+        "name": "Breezhaler",
+        "description": "Is normally used as a treatment for COPD patiens such as Onbrez indacaterol), Seebri (glycopyrronium), and Ultibro (glycopyrronium plus indacaterol). Breezhaler is indicated as once-per-day bronchodilator treatment to relieve the patient's symptoms with Cronic Obstructive Pulmonary Disease(COPD).",
+        "video_id": "s5gWSxz3EWw"
+    }
+]
