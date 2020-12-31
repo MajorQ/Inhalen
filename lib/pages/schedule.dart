@@ -43,21 +43,19 @@ class SchedulePage extends StatelessWidget {
                           reminderObject: reminders[index],
                           onTimePressed: () async {
                             await pickTime(context, reminderModel, index);
-                            print(await notificationPlugin
-                                .getPendingNotificationCount());
                           },
-                          onSwitchChanged: (bool state) =>
-                              reminderModel.changeStateAt(state, index),
+                          onSwitchChanged: (bool state) {
+                            reminderModel.changeStateAt(state, index);
+                            notificationPlugin.scheduleNotification(reminderModel, index);
+                          },
                           addLabel: () =>
                               pickLabel(context, reminderModel, index),
-                          toggleDays: (day) async {
+                          toggleDays: (day) {
                             reminderModel.toggleDaysAt(day, index);
                             notificationPlugin.scheduleNotification(reminderModel, index);
-                            print(await notificationPlugin
-                                .getPendingNotificationCount());
                           },
                           delete: () async {
-                            notificationPlugin.cancelNotification();
+                            notificationPlugin.cancelNotification(index);
                             print(await notificationPlugin
                                 .getPendingNotificationCount());
                             reminderModel.delete(index);
