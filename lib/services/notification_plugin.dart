@@ -76,6 +76,7 @@ class NotificationPlugin {
     else {
       await flutterLocalNotificationsPlugin.zonedSchedule(
           index,
+          reminders[index].label == 'Label' ? 'Reminder' :
           'Reminder ${reminders[index].label}',
           'Saatnya menggunakan obat anda!',
           _scheduleReminder(reminders[index]),
