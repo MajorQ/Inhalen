@@ -36,7 +36,7 @@ class ReminderModel extends ChangeNotifier {
       time: TimeOfDay.now(),
       label: 'Label',
       isEnabled: true,
-      daySelection: List.generate(7, (index) => false, growable: false),
+      daySelection: List.generate(7, (index) => true, growable: false),
     );
     _reminders.add(newReminder);
     sqfliteHelper.createReminder(newReminder.toMap(_reminders.length - 1));

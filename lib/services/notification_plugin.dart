@@ -50,17 +50,24 @@ class NotificationPlugin {
       playSound: true,
     );
     const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);        
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-        index,
-        'Reminder ${reminders[index].label}',
-        'Saatnya menggunakan obat anda!',
-        _scheduleReminder(reminders[index]),
-        platformChannelSpecifics,
-        androidAllowWhileIdle: true,
-        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime);
+        NotificationDetails(android: androidPlatformChannelSpecifics); 
+
+    if (!reminders[index].isEnabled) {
+      cancelNotification(index);
+    }
+    else {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+          index,
+          'Reminder ${reminders[index].label}',
+          'Saatnya menggunakan obat anda!',
+          _scheduleReminder(reminders[index]),
+          platformChannelSpecifics,
+          androidAllowWhileIdle: true,
+          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime);
+    }
+    print(await getPendingNotificationCount());
   }
   
   tz.TZDateTime _scheduleTime(int hour, int minute) {
@@ -81,8 +88,8 @@ class NotificationPlugin {
     return scheduledReminder;
   }
 
-  void cancelNotification() async {
-    await flutterLocalNotificationsPlugin.cancel(0);
+  void cancelNotification(int index) async {
+    await flutterLocalNotificationsPlugin.cancel(index);
   }
 
   Future<int> getPendingNotificationCount() async {
