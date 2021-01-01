@@ -43,19 +43,19 @@ class SchedulePage extends StatelessWidget {
                           onSwitchChanged: (bool state) async {
                             reminderModel.changeStateAt(state, index);
                             await notificationPlugin.scheduleNotification(
-                                reminderModel, index);
+                                reminderModel, index, 'notification'.tr());
                           },
                           addLabel: () =>
                               pickLabel(context, reminderModel, index),
                           toggleDays: (day) async {
                             reminderModel.toggleDaysAt(day, index);
                             await notificationPlugin.scheduleNotification(
-                                reminderModel, index);
+                                reminderModel, index, 'notification'.tr());
                           },
                           delete: () async {
                             reminderModel.delete(index);
-                            await notificationPlugin
-                                .updateNotifications(reminderModel);
+                            await notificationPlugin.updateNotifications(
+                                reminderModel, 'notification'.tr());
                           },
                           onCardTapped: () {
                             if (reminders[index].controller.isCardSeparated ==
@@ -160,7 +160,8 @@ class SchedulePage extends StatelessWidget {
 
     if (time != null) {
       reminderModel.changeTimeAt(i, time);
-      await notificationPlugin.scheduleNotification(reminderModel, i);
+      await notificationPlugin.scheduleNotification(
+          reminderModel, i, 'notification'.tr());
     }
 
     return time;

@@ -47,14 +47,16 @@ class NotificationPlugin {
   }
 
   tz.TZDateTime _scheduleReminder(ReminderData reminder) {
-    tz.TZDateTime scheduledReminder = _scheduleTime(reminder.time.hour, reminder.time.minute);
-    if (!reminder.daySelection[scheduledReminder.weekday-1]) {
+    tz.TZDateTime scheduledReminder =
+        _scheduleTime(reminder.time.hour, reminder.time.minute);
+    if (!reminder.daySelection[scheduledReminder.weekday - 1]) {
       scheduledReminder = scheduledReminder.add(const Duration(days: 1));
     }
     return scheduledReminder;
   }
 
-  Future<void> scheduleNotification(ReminderModel reminderModel, int index) async {
+  Future<void> scheduleNotification(
+      ReminderModel reminderModel, int index, String notificationMsg) async {
     List<ReminderData> reminders = reminderModel.list;
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
@@ -68,17 +70,17 @@ class NotificationPlugin {
       playSound: true,
     );
     const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics); 
+        NotificationDetails(android: androidPlatformChannelSpecifics);
 
     if (!reminders[index].isEnabled) {
       _cancelNotification(index);
-    }
-    else {
+    } else {
       await flutterLocalNotificationsPlugin.zonedSchedule(
           index,
-          reminders[index].label == 'Label' ? 'Reminder' :
-          'Reminder ${reminders[index].label}',
-          'Saatnya menggunakan obat anda!',
+          reminders[index].label == 'Label'
+              ? 'Reminder'
+              : 'Reminder ${reminders[index].label}',
+          notificationMsg,
           _scheduleReminder(reminders[index]),
           platformChannelSpecifics,
           androidAllowWhileIdle: true,
@@ -89,14 +91,15 @@ class NotificationPlugin {
     print(await getPendingNotificationCount());
   }
 
-  Future<void> updateNotifications(ReminderModel reminderModel) async {
+  Future<void> updateNotifications(
+      ReminderModel reminderModel, String notificationMsg) async {
     int countReminder = reminderModel.length;
     print(countReminder);
     await flutterLocalNotificationsPlugin.cancelAll();
     print(await getPendingNotificationCount());
 
-    for(int i=0; i < countReminder; i++) {
-      await scheduleNotification(reminderModel, i);
+    for (int i = 0; i < countReminder; i++) {
+      await scheduleNotification(reminderModel, i, notificationMsg);
     }
   }
 

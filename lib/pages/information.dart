@@ -120,7 +120,7 @@ class BottomCard extends StatelessWidget {
           ),
           Center(
             child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 24),
+              margin: const EdgeInsets.symmetric(vertical: 20),
               width: 350,
               height: 50,
               child: RaisedButton(

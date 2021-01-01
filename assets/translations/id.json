@@ -1,23 +1,39 @@
 {
-    "hello": "Halo {}",
-    "loading": "memuat...",
-    "learn": "Ayo kita pelajari penggunaan Inhaler!",
     "bottom_navbar_icons" : {
         "home": "Beranda",
         "routine": "Rutinitas",
         "settings": "Pengaturan"
     },
+
+    "hello": "Halo {}",
+    "loading": "memuat...",
+    "learn": "Ayo kita pelajari penggunaan Inhaler!",
     "back_button": "KEMBALI",
     "how_to_use_button": "CARA PEMAKAIAN",
     "video": "Yuk, belajar dari video ini!",
+
     "add_reminder": "Tambahkan reminder agar Anda\ntidak lupa menggunakan obat!",
-    "delete": "Hapus",
     "select_time": "Tentukan waktu",
     "label_input": "Label reminder",
     "label_input_validator": "Label harus kurang\ndari 9 huruf!",
+    "select_day": "Pilih hari",
+    "weekday": "Setiap hari kerja",
+    "weekend": "Setiap hari libur",
+    "every_day": "Setiap hari",
+    "mon": "Sen",
+    "tue": "Sel",
+    "wed": "Rab",
+    "thu": "Kam",
+    "fri": "Jum",
+    "sat": "Sab",
+    "sun": "Min",
+    "notification": "Saatnya menggunakan obat anda!",
+
     "name_input": "Nama Anda",
     "name_input_validator": "Username tidak boleh\nlebih dari 12 karakter!",
+
     "name": "Nama",
     "language": "Bahasa",
+    "delete": "Hapus",
     "cancel": "Batal"
 }

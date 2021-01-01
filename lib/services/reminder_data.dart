@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_card/sliding_card.dart';
 import 'package:inhalen/services/colors.dart';
@@ -17,9 +18,13 @@ class ReminderData {
   }) : controller = SlidingCardController();
 
   /// Get text about days (every day/select day) from [daySelection]
-  String get days {
+  String getDays(
+      {@required List<String> dayList,
+      String emptyMsg = 'Select day',
+      String weekdayMsg = 'Weekday',
+      String weekendMsg = 'Weekend',
+      String fullMsg = 'Every day'}) {
     String days = '';
-    List<String> dayList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     bool first = true;
 
     if (daySelection.contains(true) && daySelection.contains(false)) {
@@ -33,11 +38,18 @@ class ReminderData {
           }
         }
       }
+      if (listEquals(
+          daySelection, [true, true, true, true, true, false, false])) {
+        days = weekdayMsg;
+      } else if (listEquals(
+          daySelection, [false, false, false, false, false, true, true])) {
+        days = weekendMsg;
+      }
     } else {
       if (daySelection.contains(true)) {
-        days = 'Every day';
+        days = fullMsg;
       } else {
-        days = 'Select day';
+        days = emptyMsg;
       }
     }
     return days;

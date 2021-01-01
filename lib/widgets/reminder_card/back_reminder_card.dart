@@ -31,13 +31,13 @@ class BackReminderCard extends StatelessWidget {
             top: 10,
             child: ToggleButtons(
               children: <Widget>[
-                LetterWidget(letter: 'm'),
-                LetterWidget(letter: 't'),
-                LetterWidget(letter: 'w'),
-                LetterWidget(letter: 't'),
-                LetterWidget(letter: 'f'),
-                LetterWidget(letter: 's'),
-                LetterWidget(letter: 's'),
+                DayLetterWidget(day: 'mon'.tr()),
+                DayLetterWidget(day: 'tue'.tr()),
+                DayLetterWidget(day: 'wed'.tr()),
+                DayLetterWidget(day: 'thu'.tr()),
+                DayLetterWidget(day: 'fri'.tr()),
+                DayLetterWidget(day: 'sat'.tr()),
+                DayLetterWidget(day: 'sun'.tr()),
               ],
               textStyle: TextStyle(
                 fontFamily: 'OpenSans',
@@ -94,10 +94,10 @@ class BackReminderCard extends StatelessWidget {
   }
 }
 
-class LetterWidget extends StatelessWidget {
-  final String letter;
-  const LetterWidget({
-    @required this.letter,
+class DayLetterWidget extends StatelessWidget {
+  final String day;
+  const DayLetterWidget({
+    @required this.day,
     Key key,
   }) : super(key: key);
 
@@ -105,7 +105,7 @@ class LetterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Text(letter.toUpperCase()),
+      child: Text(day[0]),
     );
   }
 }

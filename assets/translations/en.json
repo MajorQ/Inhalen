@@ -1,23 +1,39 @@
 {
-    "hello": "Hello {}",
-    "loading": "loading...",
-    "learn": "Let's learn how to use Inhalers!",
     "bottom_navbar_icons" : {
         "home": "Home",
         "routine": "Routine",
         "settings": "Settings"
     },
+
+    "hello": "Hello {}",
+    "loading": "loading...",
+    "learn": "Let's learn how to use Inhalers!",
     "back_button": "BACK",
     "how_to_use_button": "HOW TO USE",
     "video": "Learn how to use inhalers properly\nfrom this video!",
+
     "add_reminder": "Add reminders so you\nremember to take medicine!",
-    "delete": "Delete",
     "select_time": "Select time",
     "label_input": "Reminder label",
     "label_input_validator": "Label must be less\nthan 9 letters!",
+    "select_day": "Select day",
+    "weekday": "Every weekday",
+    "weekend": "Every weekend day",
+    "every_day": "Every day",
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat",
+    "sun": "Sun",
+    "notification": "It's time to take your medicine!",
+
     "name_input": "Username",
     "name_input_validator": "Username must be less\nthan 12 characters!",
+
     "name": "Name",
     "language": "Language",
+    "delete": "Delete",
     "cancel": "Cancel"
 }

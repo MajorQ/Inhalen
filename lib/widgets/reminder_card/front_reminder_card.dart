@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inhalen/services/colors.dart';
 import 'package:inhalen/services/reminder_data.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class FrontReminderCard extends StatelessWidget {
   final Function onSwitchChanged;
@@ -59,7 +60,21 @@ class FrontReminderCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     //Days
-                    Text('${reminderObject.days}',
+                    Text(
+                        reminderObject.getDays(
+                            dayList: [
+                              'mon'.tr(),
+                              'tue'.tr(),
+                              'wed'.tr(),
+                              'thu'.tr(),
+                              'fri'.tr(),
+                              'sat'.tr(),
+                              'sun'.tr()
+                            ],
+                            emptyMsg: 'select_day'.tr(),
+                            weekdayMsg: 'weekday'.tr(),
+                            weekendMsg: 'weekend'.tr(),
+                            fullMsg: 'every_day'.tr()),
                         style: TextStyle(
                           fontSize: 16.0,
                           letterSpacing: 0.15,
