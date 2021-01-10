@@ -191,6 +191,6 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           );
         });
-    return (label != '' && label != null) ? label : initialText;
+    return label;
   }
 }

@@ -84,6 +84,7 @@ class ReminderModel extends ChangeNotifier {
 
   /// Change the [time] for a specific index then updates the database
   void changeTimeAt(int index, TimeOfDay time) {
+    if (time == null) return;
     if (_reminders[index].time == time) return;
     _reminders[index].time = time;
     notificationPlugin.scheduleNotification(
@@ -94,6 +95,7 @@ class ReminderModel extends ChangeNotifier {
 
   /// Change the [label] value from a specific index then updates the databasee
   void changeLabelAt(int index, String value) {
+    if (value == null || value == '') return;
     if (_reminders[index].label == value) return;
     _reminders[index].label = value;
     notificationPlugin.scheduleNotification(

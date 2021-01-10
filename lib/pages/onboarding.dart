@@ -180,7 +180,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 onFieldSubmitted: (String value) {
                   if (_labelKey.currentState.validate()) {
                     setState(() {
-                      if (value == '') {
+                      if (value == null || value == '') {
                         showDone = false;
                       } else {
                         showDone = true;

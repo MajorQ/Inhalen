@@ -12,6 +12,7 @@ class SettingsModel extends ChangeNotifier {
   String get name => map['name'];
 
   set name(String newName) {
+    if (newName == null || newName == '') return;
     map['name'] = newName;
     sqfliteHelper.updateSettings(map);
     notifyListeners();
@@ -25,7 +26,7 @@ class SettingsModel extends ChangeNotifier {
   Future<void> fetch() async {
     List<Map> maps = await sqfliteHelper.readSettings();
     map['name'] = maps[0]['name'];
-    map['newlyInstalled'] = (maps[0]['newlyInstalled'] == 1);
+    map['newlyInstalled'] = maps[0]['newlyInstalled'];
     notifyListeners();
   }
 }

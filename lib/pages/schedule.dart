@@ -128,8 +128,7 @@ class SchedulePage extends StatelessWidget {
             ),
           );
         });
-
-    return time ?? initialTime;
+    return time;
   }
 
   /// Function to change [label] on a [ReminderData] object
@@ -197,6 +196,6 @@ class SchedulePage extends StatelessWidget {
             ],
           );
         });
-    return (label != '' && label != null) ? label : initialText;
+    return label;
   }
 }
