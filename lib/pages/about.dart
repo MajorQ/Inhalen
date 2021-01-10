@@ -14,76 +14,79 @@ class AboutUsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(children: [
-        SizedBox(
-          height: 100,
-          width: 100,
-          child: Image.asset(
-            'assets/images/makaraUI.png',
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 0),
+        child: ListView(children: [
+          SizedBox(
+            height: 100,
+            width: 100,
+            child: Image.asset(
+              'assets/images/makaraUI.png',
+            ),
           ),
-        ),
-        SizedBox(
-          height: 30,
-        ),
-        Container(
-          alignment: Alignment.center,
-          child: Text(
-            "Aplikasi ini diperuntukkan kepada riset Fakultas Farmasi Universitas Indonesia",
-            style: TextStyle(
-                fontFamily: "Raleway",
-                fontSize: 20,
-                fontWeight: FontWeight.w400),
-            textAlign: TextAlign.center,
+          SizedBox(
+            height: 30,
           ),
-        ),
-        SizedBox(
-          height: 30,
-        ),
-        Container(
-          alignment: Alignment.center,
-          child: Text(
-            "Developers",
-            style: TextStyle(
+          Container(
+            alignment: Alignment.center,
+            child: Text(
+              "Aplikasi ini diperuntukkan kepada riset Fakultas Farmasi Universitas Indonesia",
+              style: TextStyle(
+                  fontFamily: "Raleway",
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Container(
+            alignment: Alignment.center,
+            child: Text(
+              "Developers",
+              style: TextStyle(
+                  fontFamily: "Raleway",
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Stack(children: [
+            Container(
+              height: 300,
+              alignment: Alignment.topCenter,
+              child: PageView.builder(
+                controller: pageController,
+                itemCount: name.length,
+                itemBuilder: (context, position) {
+                  return imageSlider(position);
+                },
+              ),
+            ),
+          ]),
+          Container(
+            alignment: Alignment.center,
+            child: Text(
+              "Attribution",
+              style: TextStyle(
                 fontFamily: "Raleway",
                 fontSize: 25,
-                fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
           ),
-        ),
-        Stack(children: [
           Container(
-            height: 300,
-            alignment: Alignment.topCenter,
-            child: PageView.builder(
-              controller: pageController,
-              itemCount: name.length,
-              itemBuilder: (context, position) {
-                return imageSlider(position);
-              },
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(top: 30, bottom: 30),
+            child: Text(
+              "Illustrations by Rahma Maghfira",
+              style: TextStyle(fontFamily: "Raleway", fontSize: 20),
             ),
           ),
         ]),
-        Container(
-          alignment: Alignment.center,
-          child: Text(
-            "Attribution",
-            style: TextStyle(
-              fontFamily: "Raleway",
-              fontSize: 25,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Container(
-          alignment: Alignment.center,
-          margin: EdgeInsets.only(top: 30, bottom: 30),
-          child: Text(
-            "Illustrations by Rahma Maghfira",
-            style: TextStyle(fontFamily: "Raleway", fontSize: 20),
-          ),
-        ),
-      ]),
+      ),
     );
   }
 

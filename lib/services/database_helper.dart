@@ -4,7 +4,8 @@ const db_name = 'database.db';
 const String reminderTable = 'reminder';
 const String settingsTable = 'settings';
 
-/// Dev NOTE: try to decrease number of columns, or create a new table in the future
+// TODO: change to implementation instead of concrete class
+// TODO: use ReminderData instead of maps
 class SQFliteHelper {
   /// The database instance inside of DatabaseHelper
   Database _database;
@@ -13,7 +14,7 @@ class SQFliteHelper {
   Future<void> initialize() async {
     try {
       _database = await openDatabase(db_name,
-          version: 4, onCreate: _onCreate, onUpgrade: _onUpgrade);
+          version: 5, onCreate: _onCreate, onUpgrade: _onUpgrade);
     } catch (e) {
       print('Open Database error -> $e');
     }
@@ -24,7 +25,8 @@ class SQFliteHelper {
   _onCreate(Database db, int version) async {
     await db.execute('''
         CREATE TABLE $settingsTable (
-          name text
+          name TEXT,
+          newlyInstalled INT
         )
       ''');
     await db.execute('''
@@ -44,7 +46,7 @@ class SQFliteHelper {
         )
       ''');
 
-    await db.insert(settingsTable, {'name': 'User'});
+    await db.insert(settingsTable, {'name': 'User', 'newlyInstalled': 1});
   }
 
   /// Drops databases then re-runs the [_onCreate] function

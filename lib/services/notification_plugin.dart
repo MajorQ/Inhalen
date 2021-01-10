@@ -1,15 +1,12 @@
-// import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:inhalen/services/reminder_model.dart';
-import 'package:inhalen/services/reminder_data.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:inhalen/services/reminder_data.dart';
 
 class NotificationPlugin {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  var tempReminder = ReminderData();
 
   initializeNotificationPlugin() async {
     // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
@@ -56,8 +53,7 @@ class NotificationPlugin {
   }
 
   Future<void> scheduleNotification(
-      ReminderModel reminderModel, int index, String notificationMsg) async {
-    List<ReminderData> reminders = reminderModel.list;
+      ReminderData reminder, int index, String notificationMsg) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
       'INHALEN_ID',
@@ -72,16 +68,14 @@ class NotificationPlugin {
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
 
-    if (!reminders[index].isEnabled) {
+    if (!reminder.isEnabled) {
       _cancelNotification(index);
     } else {
       await flutterLocalNotificationsPlugin.zonedSchedule(
           index,
-          reminders[index].label == 'Label'
-              ? 'Reminder'
-              : 'Reminder ${reminders[index].label}',
+          reminder.label == 'Label' ? 'Reminder' : 'Reminder ${reminder.label}',
           notificationMsg,
-          _scheduleReminder(reminders[index]),
+          _scheduleReminder(reminder),
           platformChannelSpecifics,
           androidAllowWhileIdle: true,
           matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
@@ -92,14 +86,13 @@ class NotificationPlugin {
   }
 
   Future<void> updateNotifications(
-      ReminderModel reminderModel, String notificationMsg) async {
-    int countReminder = reminderModel.length;
-    print(countReminder);
+      List<ReminderData> reminders, String notificationMsg) async {
+    print(reminders.length);
     await flutterLocalNotificationsPlugin.cancelAll();
     print(await getPendingNotificationCount());
 
-    for (int i = 0; i < countReminder; i++) {
-      await scheduleNotification(reminderModel, i, notificationMsg);
+    for (int index = 0; index < reminders.length; ++index) {
+      await scheduleNotification(reminders[index], index, notificationMsg);
     }
   }
 

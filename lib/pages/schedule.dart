@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:inhalen/services/colors.dart';
-import 'package:inhalen/services/notification_plugin.dart';
 import 'package:inhalen/services/reminder_data.dart';
 import 'package:inhalen/services/reminder_model.dart';
 import 'package:inhalen/widgets/reminder_card/reminder_card.dart';
@@ -13,8 +12,7 @@ class SchedulePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var notificationPlugin =
-        Provider.of<NotificationPlugin>(context, listen: false);
+    var reminderModel = Provider.of<ReminderModel>(context);
     return Container(
       color: Colors.white,
       child: Stack(alignment: Alignment.topCenter, children: <Widget>[
@@ -27,55 +25,37 @@ class SchedulePage extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 131, 0, 105),
-          child: Consumer<ReminderModel>(
-            builder: (context, reminderModel, _) {
-              List<ReminderData> reminders = reminderModel.list;
-              return ListView.builder(
-                  itemCount: reminders.length,
-                  itemBuilder: (context, index) {
-                    return Center(
-                      child: ReminderCard(
-                          key: ObjectKey(reminders[index]),
-                          reminderObject: reminders[index],
-                          onTimePressed: () async {
-                            await pickTime(context, reminderModel, index);
-                          },
-                          onSwitchChanged: (bool state) async {
-                            reminderModel.changeStateAt(state, index);
-                            await notificationPlugin.scheduleNotification(
-                                reminderModel, index, 'notification'.tr());
-                          },
-                          addLabel: () =>
-                              pickLabel(context, reminderModel, index),
-                          toggleDays: (day) async {
-                            reminderModel.toggleDaysAt(day, index);
-                            await notificationPlugin.scheduleNotification(
-                                reminderModel, index, 'notification'.tr());
-                          },
-                          delete: () async {
-                            reminderModel.delete(index);
-                            await notificationPlugin.updateNotifications(
-                                reminderModel, 'notification'.tr());
-                          },
-                          onCardTapped: () {
-                            if (reminders[index].controller.isCardSeparated ==
-                                true) {
-                              reminders[index].controller.collapseCard();
-                            } else {
-                              reminders[index].controller.expandCard();
-                              for (int i = 0; i < reminders.length; ++i) {
-                                if (i == index) {
-                                  continue;
-                                } else {
-                                  reminders[i].controller.collapseCard();
-                                }
-                              }
-                            }
-                          }),
-                    );
-                  });
-            },
-          ),
+          child: ListView.builder(
+              itemCount: reminderModel.length,
+              itemBuilder: (context, index) {
+                return Center(
+                  child: ReminderCard(
+                      key: ObjectKey(reminderModel.list[index]),
+                      reminderObject: reminderModel.list[index],
+                      onTimePressed: () async {
+                        TimeOfDay time = await pickTime(
+                            context, reminderModel.getTimeFrom(index));
+                        reminderModel.changeTimeAt(index, time);
+                      },
+                      onSwitchChanged: (bool state) {
+                        reminderModel.changeStateAt(state, index);
+                      },
+                      addLabel: () async {
+                        String label = await pickLabel(
+                            context, reminderModel.getLabelFrom(index));
+                        reminderModel.changeLabelAt(index, label);
+                      },
+                      toggleDays: (day) {
+                        reminderModel.toggleDaysAt(day, index);
+                      },
+                      delete: () {
+                        reminderModel.delete(index);
+                      },
+                      onCardTapped: () {
+                        reminderModel.tapCardAt(index);
+                      }),
+                );
+              }),
         ),
         Align(
           alignment: Alignment.bottomCenter,
@@ -85,16 +65,8 @@ class SchedulePage extends StatelessWidget {
               backgroundColor: CustomColors.maroon,
               foregroundColor: Colors.black,
               onPressed: () async {
-                var reminderModel =
-                    Provider.of<ReminderModel>(context, listen: false);
-                reminderModel.add();
-                int last = reminderModel.length - 1;
-                var currentTime = await pickTime(context, reminderModel, last);
-                if (currentTime != null) {
-                  reminderModel.changeTimeAt(last, currentTime);
-                } else {
-                  reminderModel.delete(last);
-                }
+                TimeOfDay time = await pickTime(context, TimeOfDay.now());
+                reminderModel.add(time);
               },
               child: Icon(
                 Icons.add,
@@ -108,13 +80,12 @@ class SchedulePage extends StatelessWidget {
   }
 
   /// Function to show time picker and change [time] on a [ReminderData] object
+  // TODO: make these functions callable from anywhere and clean up
   Future<TimeOfDay> pickTime(
-      BuildContext context, ReminderModel reminderModel, int i) async {
-    var notificationPlugin =
-        Provider.of<NotificationPlugin>(context, listen: false);
+      BuildContext context, TimeOfDay initialTime) async {
     TimeOfDay time = await showTimePicker(
         context: context,
-        initialTime: reminderModel.getTimeFrom(i),
+        initialTime: initialTime,
         cancelText: 'cancel'.tr(),
         helpText: 'select_time'.tr(),
         builder: (BuildContext context, Widget child) {
@@ -158,18 +129,13 @@ class SchedulePage extends StatelessWidget {
           );
         });
 
-    if (time != null) {
-      reminderModel.changeTimeAt(i, time);
-      await notificationPlugin.scheduleNotification(
-          reminderModel, i, 'notification'.tr());
-    }
-
-    return time;
+    return time ?? initialTime;
   }
 
   /// Function to change [label] on a [ReminderData] object
-  pickLabel(BuildContext context, ReminderModel reminderModel, int i) async {
-    showDialog(
+  Future<String> pickLabel(BuildContext context, String initialText) async {
+    String label;
+    await showDialog(
         context: context,
         builder: (context) {
           /// Show text fields input
@@ -192,9 +158,7 @@ class SchedulePage extends StatelessWidget {
                         fontSize: 14.0)),
                 maxLength: 8,
                 keyboardType: TextInputType.name,
-                onSaved: (String value) {
-                  reminderModel.changeLabelAt(i, value);
-                },
+                onSaved: (String value) => label = value,
                 validator: (String value) {
                   return value.length > 8 ? 'label_input_validator'.tr() : null;
                 },
@@ -233,5 +197,6 @@ class SchedulePage extends StatelessWidget {
             ],
           );
         });
+    return (label != '' && label != null) ? label : initialText;
   }
 }

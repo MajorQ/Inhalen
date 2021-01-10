@@ -1,8 +1,17 @@
 {
     "bottom_navbar_icons" : {
         "home": "Home",
-        "routine": "Routine",
+        "routine": "Reminders",
         "settings": "Settings"
+    },
+    "onboarding": {
+        "language": "Choose Your Preferred Language",
+        "study": "Learn about Inhalers!",
+        "study_body": "Learn how to use inhalers from the doctors!\n\nMake sure you know the correct usage of inhalers!",
+        "reminder": "Add Reminders!",
+        "reminder_body": "To remember the correct time and day to take your medicine!",
+        "start": "Let's Get Started!",
+        "your_name": "What's your name?"
     },
 
     "hello": "Hello {}",
@@ -35,5 +44,7 @@
     "name": "Name",
     "language": "Language",
     "delete": "Delete",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "done": "Done",
+    "skip": "Skip"
 }

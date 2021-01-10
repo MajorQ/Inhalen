@@ -1,8 +1,17 @@
 {
     "bottom_navbar_icons" : {
         "home": "Beranda",
-        "routine": "Rutinitas",
+        "routine": "Pengingat",
         "settings": "Pengaturan"
+    },
+    "onboarding": {
+        "language": "Pilih Bahasa yang Anda Inginkan",
+        "study": "Belajar tentang Inhaler!",
+        "study_body": "Belajar bagaimana cara menggunakan inhaler dari ahlinya!\n\nPastikan Anda dapat menggunakan inhaler dengan cara yang benar!",
+        "reminder": "Tambahkan Pengingat!",
+        "reminder_body": "Agar selalu ingat untuk menggunakan obatnya di hari dan jam yang tepat!",
+        "start": "Mari Kita Mulai!",
+        "your_name": "Siapa nama Anda?"
     },
 
     "hello": "Halo {}",
@@ -35,5 +44,7 @@
     "name": "Nama",
     "language": "Bahasa",
     "delete": "Hapus",
-    "cancel": "Batal"
+    "cancel": "Batal",
+    "done": "Selesai",
+    "skip": "Lewat"
 }

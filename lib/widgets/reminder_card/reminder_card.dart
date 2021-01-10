@@ -27,9 +27,7 @@ class ReminderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        onCardTapped();
-      },
+      onTap: onCardTapped,
       child: SlidingCard(
         slimeCardElevation: 0.5,
         cardsGap: 3.0,

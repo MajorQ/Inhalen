@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:inhalen/services/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -12,6 +13,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+// TODO: convert to FutureProvider
 class _HomePageState extends State<HomePage> {
   List<dynamic> _inhalerJSON;
 
@@ -47,9 +49,9 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Consumer<SettingsModel>(builder: (context, settingsModel, _) {
-            return (settingsModel.username != null)
+            return (settingsModel.name != null)
                 ? Text('hello', style: Theme.of(context).textTheme.headline4)
-                    .tr(args: [settingsModel.username])
+                    .tr(args: [settingsModel.name])
                 : Text('loading', style: Theme.of(context).textTheme.headline4)
                     .tr();
           }),

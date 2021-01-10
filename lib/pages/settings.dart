@@ -1,10 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:inhalen/services/colors.dart';
+import 'package:inhalen/services/reminder_model.dart';
 import 'package:inhalen/services/settings_model.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -12,88 +11,110 @@ class SettingsPage extends StatefulWidget {
   _SettingsPageState createState() => _SettingsPageState();
 }
 
+// TODO: figure out a way to make this stateless
 class _SettingsPageState extends State<SettingsPage> {
   final GlobalKey<FormState> _labelKey = GlobalKey<FormState>();
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    var reminderModel = Provider.of<ReminderModel>(context, listen: false);
+    reminderModel.changeNotificationMsg('notification'.tr());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Consumer<SettingsModel>(
-      builder: (context, settingsModel, child) {
-        return Container(
-          width: double.infinity,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('bottom_navbar_icons.settings',
-                      style: Theme.of(context).textTheme.headline4)
-                  .tr(),
-              SizedBox(
-                height: 30,
-              ),
-              GestureDetector(
-                onTap: () => _pickLabel(context, settingsModel),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Icon(Icons.person, size: 24),
-                    ),
-                    Text('name', style: Theme.of(context).textTheme.headline5)
-                        .tr(),
-                    Spacer(flex: 10),
-                    Text(settingsModel.username,
-                        style: Theme.of(context).textTheme.headline5.copyWith(
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.normal)),
-                    Spacer(),
-                    Icon(Icons.keyboard_arrow_down,
-                        color: Colors.grey[700], size: 32),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
+    return Container(
+      width: double.infinity,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 24.0, right: 8.0),
+            child: Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                    icon:
+                        Icon(Icons.info, size: 44, color: CustomColors.maroon),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/about_us');
+                    })),
+          ),
+          Text('bottom_navbar_icons.settings',
+                  style: Theme.of(context).textTheme.headline4)
+              .tr(),
+          SizedBox(
+            height: 30,
+          ),
+          Consumer<SettingsModel>(builder: (context, settingsModel, child) {
+            return GestureDetector(
+              onTap: () async {
+                String name = await _pickLabel(
+                  context,
+                  settingsModel.name,
+                );
+                settingsModel.name = name;
+              },
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
-                    child: Icon(Icons.language, size: 24),
+                    child: Icon(Icons.person, size: 24),
                   ),
-                  Text('language', style: Theme.of(context).textTheme.headline5)
+                  Text('name', style: Theme.of(context).textTheme.headline5)
                       .tr(),
                   Spacer(flex: 10),
-                  DropdownButton<String>(
-                      value: context.locale.languageCode,
-                      icon: Icon(Icons.keyboard_arrow_down,
-                          color: Colors.grey[700]),
-                      iconSize: 32,
+                  Text(settingsModel.name,
                       style: Theme.of(context).textTheme.headline5.copyWith(
                           color: Colors.grey[700],
-                          fontWeight: FontWeight.normal),
-                      items: [
-                        DropdownMenuItem(value: 'id', child: Text('Indonesia')),
-                        DropdownMenuItem(value: 'en', child: Text('English')),
-                      ],
-                      onChanged: ((value) {
-                        setState(() {
-                          context.locale = Locale(value);
-                        });
-                      })),
+                          fontWeight: FontWeight.normal)),
+                  Spacer(),
+                  Icon(Icons.keyboard_arrow_down,
+                      color: Colors.grey[700], size: 32),
                 ],
               ),
+            );
+          }),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Icon(Icons.language, size: 24),
+              ),
+              Text('language', style: Theme.of(context).textTheme.headline5)
+                  .tr(),
+              Spacer(flex: 10),
+              DropdownButton<String>(
+                  value: context.locale.languageCode,
+                  icon:
+                      Icon(Icons.keyboard_arrow_down, color: Colors.grey[700]),
+                  iconSize: 32,
+                  style: Theme.of(context).textTheme.headline5.copyWith(
+                      color: Colors.grey[700], fontWeight: FontWeight.normal),
+                  items: [
+                    DropdownMenuItem(value: 'id', child: Text('Indonesia')),
+                    DropdownMenuItem(value: 'en', child: Text('English')),
+                  ],
+                  onChanged: ((value) {
+                    context.locale = Locale(value);
+                  })),
             ],
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 
-  void _pickLabel(BuildContext context, SettingsModel model) async {
-    showDialog(
+  // TODO: make a dialog manager class to show dialogs without context
+  Future<String> _pickLabel(BuildContext context, String initialText) async {
+    String label;
+    await showDialog(
         context: context,
         builder: (context) {
           /// Show text fields input
@@ -131,9 +152,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 maxLength: 12,
                 keyboardType: TextInputType.name,
-                onSaved: (String value) {
-                  model.username = value;
-                },
+                onSaved: (String value) => label = value,
                 validator: (String value) {
                   return value.length > 12 ? 'name_input_validator'.tr() : null;
                 },
@@ -172,5 +191,6 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           );
         });
+    return (label != '' && label != null) ? label : initialText;
   }
 }
