@@ -93,10 +93,11 @@ class ReminderModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Change the [label] value from a specific index then updates the databasee
+  /// Change the [label] value from a specific index then updates the database
   void changeLabelAt(int index, String value) {
-    if (value == null || value == '') return;
+    if (value == null) return;
     if (_reminders[index].label == value) return;
+    if (value == '') value = 'Label';
     _reminders[index].label = value;
     notificationPlugin.scheduleNotification(
         _reminders[index], lastIndex, notificationMsg);
